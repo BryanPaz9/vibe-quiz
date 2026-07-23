@@ -1,6 +1,7 @@
 import type {
   AdminIdentity,
   LoginResponse,
+  QuizListResponse,
   PublicQuiz,
   ParticipationResult,
   RankingResponse,
@@ -17,6 +18,28 @@ export const loginFixture: LoginResponse = {
   tokenType: 'Bearer',
   expiresIn: 3_600,
   admin: adminFixture,
+};
+
+export const adminQuizListFixture: QuizListResponse = {
+  data: [
+    {
+      id: '66666666-6666-4666-8666-666666666666',
+      publicId: '77777777-7777-4777-8777-777777777777',
+      title: 'Fundamentos de IA',
+      description: 'Evaluación corta',
+      status: 'DRAFT',
+      questionCount: 3,
+      participationCount: 0,
+      createdAt: '2026-07-22T12:00:00.000Z',
+      updatedAt: '2026-07-23T14:30:00.000Z',
+    },
+  ],
+  meta: {
+    page: 1,
+    pageSize: 20,
+    total: 1,
+    totalPages: 1,
+  },
 };
 
 export const publicQuizFixture: PublicQuiz = {

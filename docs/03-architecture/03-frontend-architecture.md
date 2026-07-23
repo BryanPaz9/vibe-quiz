@@ -148,6 +148,9 @@ marcadores explícitos hasta sus respectivas entregas.
    completado y ranking público.
 4. **Autenticación administrativa — implementada:** login, verificación de
    identidad, expiración, cierre de sesión y protección de rutas.
+5. **Listado administrativo — implementado:** consulta Bearer, paginación,
+   búsqueda y filtro por estado sincronizados con la URL, estados de consulta y
+   navegación a creación y detalle.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
 `GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
@@ -155,6 +158,14 @@ exclusivamente en memoria; una recarga, un cierre de sesión, el vencimiento
 local o cualquier `401` administrativo eliminan la sesión. Después del login se
 recupera únicamente una ruta interna bajo `/admin/`, evitando redirecciones
 externas.
+
+El listado administrativo utiliza `GET /admin/quizzes` mediante el cliente
+compartido con `{ kind: 'admin' }`. TanStack Query mantiene el estado remoto y
+la clave de consulta incluye `page`, `pageSize`, `status` y `search`; React
+Router conserva esos parámetros en la URL. La página vuelve a `1` al aplicar
+una búsqueda o cambiar el estado, mientras que los controles de navegación se
+derivan exclusivamente de `meta` en la respuesta. Un `401` reutiliza la
+limpieza global de sesión y la ruta protegida devuelve al login.
 
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto

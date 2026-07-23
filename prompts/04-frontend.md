@@ -152,7 +152,36 @@ feature implementation.
 - API client tests cover the Bearer scheme and session clearing after `401`.
 - Playwright covers login, access to the administrative shell and logout.
 
+## Administrative quiz list checkpoint 1
+
+### Scope
+
+- Replace the `/admin/quizzes` placeholder using the approved
+  `GET /admin/quizzes` contract.
+- Send `page`, `pageSize`, optional `status` and optional `search` with Bearer
+  authentication.
+- Keep pagination, search and status in the URL and reset the page when search
+  or status changes.
+- Render title, status, question and participation counts, and backend dates.
+- Support loading, empty, no-results and recoverable-error states with retry.
+- Navigate to the approved creation and detail routes without implementing
+  those later checkpoints.
+- Reuse global administrative `401` session clearing.
+
+### Traceability
+
+- Functional requirement: `FR-003`.
+- User story: `US-003`.
+- Acceptance criteria: `AC-001`, `AC-004`, `AC-015`, `AC-016`.
+
+### Evidence
+
+- MSW fixtures derive the list response from the approved REST contract.
+- Component tests cover rendering, Bearer authorization, empty and no-result
+  states, retry, URL filters, pagination, navigation and administrative `401`.
+- Playwright covers login followed by the authenticated administrative list.
+
 ### Remaining frontend work
 
-- Implement the administrative quiz management verticals against the approved
-  `/admin/quizzes` contracts.
+- Implement creation and administrative detail in later checkpoints against
+  the approved `/admin/quizzes` contracts.
