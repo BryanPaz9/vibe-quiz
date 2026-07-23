@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import {
   participationFixture,
+  participationResultFixture,
   publicQuizFixture,
   rankingFixture,
 } from './fixtures';
@@ -21,6 +22,30 @@ export const handlers = [
         { ...participationFixture, alias: body.alias },
         { status: 201 },
       );
+    },
+  ),
+  http.post(
+    `${baseUrl}/participations/${participationFixture.participationId}/submissions`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Participation ${participationFixture.participationToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'INVALID_PARTICIPATION_TOKEN',
+              message: 'Invalid participation token',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/participations/${participationFixture.participationId}/submissions`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json(participationResultFixture, { status: 201 });
     },
   ),
   http.get(

@@ -1,12 +1,18 @@
+import type { PublicQuiz } from '@/shared/types/api';
+
 const STORAGE_PREFIX = 'vibequiz:participation:';
 const QUIZ_INDEX_PREFIX = 'vibequiz:participation-quiz:';
+const ANSWERS_PREFIX = 'vibequiz:participation-answers:';
 
 export interface ParticipationSession {
   participationId: string;
   participationToken: string;
   quizPublicId: string;
   alias: string;
+  quiz?: PublicQuiz;
 }
+
+export type ParticipationAnswerDraft = Record<string, string>;
 
 function storageKey(participationId: string): string {
   return `${STORAGE_PREFIX}${participationId}`;
@@ -14,6 +20,10 @@ function storageKey(participationId: string): string {
 
 function quizIndexKey(publicId: string): string {
   return `${QUIZ_INDEX_PREFIX}${publicId}`;
+}
+
+function answersKey(participationId: string): string {
+  return `${ANSWERS_PREFIX}${participationId}`;
 }
 
 function isParticipationSession(value: unknown): value is ParticipationSession {
@@ -33,6 +43,7 @@ export function saveParticipationSession(session: ParticipationSession): void {
   );
   if (previousParticipationId) {
     sessionStorage.removeItem(storageKey(previousParticipationId));
+    sessionStorage.removeItem(answersKey(previousParticipationId));
   }
 
   sessionStorage.setItem(
@@ -43,6 +54,37 @@ export function saveParticipationSession(session: ParticipationSession): void {
     quizIndexKey(session.quizPublicId),
     session.participationId,
   );
+}
+
+export function saveParticipationAnswers(
+  participationId: string,
+  answers: ParticipationAnswerDraft,
+): void {
+  sessionStorage.setItem(answersKey(participationId), JSON.stringify(answers));
+}
+
+export function getParticipationAnswers(
+  participationId: string,
+): ParticipationAnswerDraft {
+  const serialized = sessionStorage.getItem(answersKey(participationId));
+  if (!serialized) return {};
+
+  try {
+    const value: unknown = JSON.parse(serialized);
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+    const entries = Object.entries(value).filter(
+      (entry): entry is [string, string] =>
+        typeof entry[0] === 'string' && typeof entry[1] === 'string',
+    );
+    return Object.fromEntries(entries);
+  } catch {
+    sessionStorage.removeItem(answersKey(participationId));
+    return {};
+  }
+}
+
+export function clearParticipationAnswers(participationId: string): void {
+  sessionStorage.removeItem(answersKey(participationId));
 }
 
 export function getParticipationSession(
@@ -79,6 +121,7 @@ export function getParticipationSessionByQuiz(
 export function clearParticipationSession(participationId: string): void {
   const session = getParticipationSession(participationId);
   sessionStorage.removeItem(storageKey(participationId));
+  clearParticipationAnswers(participationId);
   if (session) {
     sessionStorage.removeItem(quizIndexKey(session.quizPublicId));
   }

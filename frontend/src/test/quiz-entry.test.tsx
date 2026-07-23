@@ -101,7 +101,7 @@ describe('public quiz entry', () => {
     );
 
     expect(
-      await screen.findByRole('heading', { name: 'Resolver cuestionario' }),
+      await screen.findByRole('radio', { name: 'Inteligencia Artificial' }),
     ).toBeInTheDocument();
     expect(router.state.location.pathname).toBe(
       `/quiz/${publicQuizFixture.publicId}/play`,
@@ -111,6 +111,7 @@ describe('public quiz entry', () => {
       participationToken: participationFixture.participationToken,
       quizPublicId: publicQuizFixture.publicId,
       alias: 'Grace Hopper',
+      quiz: publicQuizFixture,
     });
   });
 

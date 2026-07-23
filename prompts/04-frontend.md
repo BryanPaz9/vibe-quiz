@@ -88,7 +88,27 @@ feature implementation.
 
 ### Remaining checkpoints
 
-1. Resolve and submit the quiz.
-2. Display result and public ranking.
-3. Implement administrative authentication as the fourth overall frontend
+1. Display result and public ranking.
+2. Implement administrative authentication as the fourth overall frontend
    checkpoint.
+
+## Public flow checkpoint 2 — Resolution
+
+### Scope
+
+- Recover the active attempt without exposing its token in the URL.
+- Render questions and options ordered by contract position.
+- Persist each selected answer per participation and tab.
+- Require exactly one answer for every question before submission.
+- Submit only question and option identifiers with the Participation scheme.
+- Disable controls while submission is pending.
+- Preserve answers after recoverable failures.
+- Navigate to the result route after an accepted or previously completed
+  submission.
+
+### Evidence
+
+- Component tests cover missing sessions, public rendering, incomplete
+  submissions, draft recovery, single submission, authorization headers and
+  recoverable API errors.
+- Playwright covers entry, answer selection, submission and result navigation.

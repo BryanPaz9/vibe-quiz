@@ -102,6 +102,7 @@ export default function QuizEntryPage() {
         participationToken: participation.participationToken,
         quizPublicId: participation.quizPublicId,
         alias: participation.alias,
+        quiz,
       });
       navigate(`/quiz/${participation.quizPublicId}/play`);
     } catch (error: unknown) {

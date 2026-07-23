@@ -142,8 +142,8 @@ marcadores explícitos hasta sus respectivas entregas.
 
 1. **Entrada pública — implementada:** consulta del quiz, estados de
    disponibilidad, alias, creación y recuperación del intento por pestaña.
-2. **Resolución — pendiente:** presentación de preguntas, respuestas,
-   validación completa y envío único.
+2. **Resolución — implementada:** presentación de preguntas, respuestas,
+   persistencia temporal, validación completa y envío único.
 3. **Resultado y ranking — pendiente:** resultado autorizado y ranking
    público.
 4. **Autenticación administrativa — pendiente:** login, identidad,
@@ -154,3 +154,17 @@ La entrada utiliza `GET /public/quizzes/:publicId` y
 se almacena en `sessionStorage` bajo el identificador de participación y
 un índice por `publicId`; de esta forma `/quiz/:publicId/play` puede
 recuperar el intento sin exponer el token en la URL.
+
+El intento conserva además un snapshot del contrato público consultado
+al comenzar. Esto permite recuperar las preguntas en la misma pestaña
+sin depender de una nueva exposición de respuestas correctas ni de que
+el quiz continúe publicado. Las selecciones se almacenan separadamente
+por `participationId` y permanecen disponibles ante errores
+recuperables.
+
+El envío utiliza
+`POST /participations/:participationId/submissions` con el esquema
+`Authorization: Participation`. El frontend valida completitud, ordena
+el payload según la posición contractual y bloquea envíos adicionales
+mientras la mutación está pendiente. Puntuación y duración permanecen
+autoritativas en el backend.

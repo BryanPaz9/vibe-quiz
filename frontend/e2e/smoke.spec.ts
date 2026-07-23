@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { participationFixture, publicQuizFixture } from '../src/mocks/fixtures';
+import {
+  participationFixture,
+  participationResultFixture,
+  publicQuizFixture,
+} from '../src/mocks/fixtures';
 
 test('renders the application shell', async ({ page }) => {
   await page.goto('/');
@@ -12,7 +16,7 @@ test('renders the application shell', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'VibeQuiz' })).toBeVisible();
 });
 
-test('starts the public quiz entry flow', async ({ page }) => {
+test('starts, resolves and submits a public quiz', async ({ page }) => {
   await page.route(
     `**/api/v1/public/quizzes/${publicQuizFixture.publicId}`,
     async (route) => {
@@ -29,6 +33,18 @@ test('starts the public quiz entry flow', async ({ page }) => {
       });
     },
   );
+  await page.route(
+    `**/api/v1/participations/${participationFixture.participationId}/submissions`,
+    async (route) => {
+      expect(route.request().headers()['authorization']).toBe(
+        `Participation ${participationFixture.participationToken}`,
+      );
+      await route.fulfill({
+        json: participationResultFixture,
+        status: 201,
+      });
+    },
+  );
   await page.goto(`/quiz/${publicQuizFixture.publicId}`);
 
   await expect(
@@ -37,10 +53,18 @@ test('starts the public quiz entry flow', async ({ page }) => {
   await page.getByLabel('Alias').fill('Ada');
   await page.getByRole('button', { name: 'Comenzar cuestionario' }).click();
 
-  await expect(
-    page.getByRole('heading', { name: 'Resolver cuestionario' }),
-  ).toBeVisible();
   await expect(page).toHaveURL(
     new RegExp(`/quiz/${publicQuizFixture.publicId}/play$`),
+  );
+  await page.getByRole('radio', { name: 'Inteligencia Artificial' }).check();
+  await page.getByRole('button', { name: 'Finalizar cuestionario' }).click();
+
+  await expect(
+    page.getByRole('heading', { name: 'Tu resultado' }),
+  ).toBeVisible();
+  await expect(page).toHaveURL(
+    new RegExp(
+      `/quiz/${publicQuizFixture.publicId}/result/${participationFixture.participationId}$`,
+    ),
   );
 });

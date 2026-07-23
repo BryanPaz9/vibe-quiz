@@ -78,7 +78,7 @@ El scaffold y sus fundamentos están completos: rutas, layouts, providers,
 componentes compartidos, cliente REST, tipos contractuales y configuración de
 pruebas.
 
-El primer checkpoint del flujo público también está implementado:
+Los dos primeros checkpoints del flujo público están implementados:
 
 - Consulta de un cuestionario publicado.
 - Presentación de metadatos sin mostrar preguntas ni respuestas correctas.
@@ -86,6 +86,12 @@ El primer checkpoint del flujo público también está implementado:
 - Inicio de participación.
 - Persistencia del token por pestaña y navegación al jugador.
 - Recuperación de una participación iniciada en la misma pestaña.
+- Presentación ordenada de preguntas y opciones públicas.
+- Persistencia temporal de cada respuesta seleccionada.
+- Validación de que todas las preguntas estén respondidas.
+- Envío único mediante el token `Participation`.
+- Conservación de respuestas ante errores recuperables.
+- Navegación al resultado después de un envío aceptado.
 
-La resolución, el envío, el resultado, el ranking y la autenticación
-administrativa continúan reservados para sus siguientes checkpoints.
+La presentación del resultado, el ranking y la autenticación administrativa
+continúan reservados para sus siguientes checkpoints.

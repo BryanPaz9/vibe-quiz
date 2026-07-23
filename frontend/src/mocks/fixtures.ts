@@ -1,5 +1,6 @@
 import type {
   PublicQuiz,
+  ParticipationResult,
   RankingResponse,
   StartParticipationResponse,
 } from '@/shared/types/api';
@@ -51,4 +52,14 @@ export const participationFixture: StartParticipationResponse = {
   quizPublicId: publicQuizFixture.publicId,
   alias: 'Ada',
   startedAt: '2026-07-22T12:00:00.000Z',
+};
+
+export const participationResultFixture: ParticipationResult = {
+  participationId: participationFixture.participationId,
+  alias: participationFixture.alias,
+  score: 1,
+  totalQuestions: 1,
+  percentage: 100,
+  durationMs: 42_000,
+  completedAt: '2026-07-22T12:00:42.000Z',
 };
