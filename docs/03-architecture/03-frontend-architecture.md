@@ -109,3 +109,31 @@ para consultar o modificar el intento.
 - No mostrar marcas de respuesta correcta.
 - Mostrar duración únicamente con el valor devuelto por el backend.
 - Etiquetar controles y conservar navegación mediante teclado.
+
+## Selección de bibliotecas
+
+La fase de fundamentos fijó las siguientes bibliotecas:
+
+- React 18 y TypeScript 5.9.
+- Vite 6 y Tailwind CSS 4.
+- React Router 7.
+- TanStack Query para estado remoto.
+- React Hook Form y Zod para formularios y validación.
+- `fetch` encapsulado para acceso REST.
+- Vitest, React Testing Library y MSW para pruebas.
+- Playwright para pruebas de extremo a extremo.
+
+React Router 7 sustituyó la propuesta inicial de la línea 6 porque la
+versión 6 disponible conservaba vulnerabilidades conocidas. Este cambio
+no modifica las rutas ni el contrato aprobados.
+
+El token opaco de participación se conserva en `sessionStorage`,
+asociado a `participationId`, durante el flujo de la pestaña. No se
+incluye en URL, logs ni estado persistente de larga duración.
+
+## Estado de implementación
+
+La fase inicial implementa el scaffold, todas las rutas, layouts,
+providers, componentes compartidos, tipos contractuales, cliente REST y
+configuración de pruebas. Las páginas funcionales permanecen como
+marcadores explícitos hasta sus respectivas entregas.
