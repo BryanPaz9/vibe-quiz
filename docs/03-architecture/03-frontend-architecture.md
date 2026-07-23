@@ -137,3 +137,46 @@ La fase inicial implementa el scaffold, todas las rutas, layouts,
 providers, componentes compartidos, tipos contractuales, cliente REST y
 configuración de pruebas. Las páginas funcionales permanecen como
 marcadores explícitos hasta sus respectivas entregas.
+
+## Entregas verticales del frontend
+
+1. **Entrada pública — implementada:** consulta del quiz, estados de
+   disponibilidad, alias, creación y recuperación del intento por pestaña.
+2. **Resolución — implementada:** presentación de preguntas, respuestas,
+   persistencia temporal, validación completa y envío único.
+3. **Resultado y ranking — implementada:** resultado autorizado, estado
+   completado y ranking público.
+4. **Autenticación administrativa — pendiente:** login, identidad,
+   expiración y cierre de sesión.
+
+La entrada utiliza `GET /public/quizzes/:publicId` y
+`POST /public/quizzes/:publicId/participations`. El token opaco devuelto
+se almacena en `sessionStorage` bajo el identificador de participación y
+un índice por `publicId`; de esta forma `/quiz/:publicId/play` puede
+recuperar el intento sin exponer el token en la URL.
+
+El intento conserva además un snapshot del contrato público consultado
+al comenzar. Esto permite recuperar las preguntas en la misma pestaña
+sin depender de una nueva exposición de respuestas correctas ni de que
+el quiz continúe publicado. Las selecciones se almacenan separadamente
+por `participationId` y permanecen disponibles ante errores
+recuperables.
+
+El envío utiliza
+`POST /participations/:participationId/submissions` con el esquema
+`Authorization: Participation`. El frontend valida completitud, ordena
+el payload según la posición contractual y bloquea envíos adicionales
+mientras la mutación está pendiente. Puntuación y duración permanecen
+autoritativas en el backend.
+
+El resultado utiliza
+`GET /participations/:participationId/result` con el mismo esquema
+`Participation`. La sesión debe coincidir con el `participationId` de la
+URL; un identificador por sí solo no autoriza la consulta. Una respuesta
+exitosa marca localmente el intento como completado y evita regresar al
+jugador.
+
+El ranking utiliza `GET /public/quizzes/:publicId/ranking`, no requiere
+token y presenta únicamente alias, puntuación, porcentaje y duración.
+La interfaz contempla rankings vacíos y resalta el alias de la sesión
+actual sin añadir información al contrato público.

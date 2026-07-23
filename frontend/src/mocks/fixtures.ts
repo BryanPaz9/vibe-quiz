@@ -1,4 +1,9 @@
-import type { PublicQuiz, RankingResponse } from '@/shared/types/api';
+import type {
+  PublicQuiz,
+  ParticipationResult,
+  RankingResponse,
+  StartParticipationResponse,
+} from '@/shared/types/api';
 
 export const publicQuizFixture: PublicQuiz = {
   publicId: '11111111-1111-4111-8111-111111111111',
@@ -39,4 +44,22 @@ export const rankingFixture: RankingResponse = {
       durationMs: 42_000,
     },
   ],
+};
+
+export const participationFixture: StartParticipationResponse = {
+  participationId: '55555555-5555-4555-8555-555555555555',
+  participationToken: 'opaque-participation-token',
+  quizPublicId: publicQuizFixture.publicId,
+  alias: 'Ada',
+  startedAt: '2026-07-22T12:00:00.000Z',
+};
+
+export const participationResultFixture: ParticipationResult = {
+  participationId: participationFixture.participationId,
+  alias: participationFixture.alias,
+  score: 1,
+  totalQuestions: 1,
+  percentage: 100,
+  durationMs: 42_000,
+  completedAt: '2026-07-22T12:00:42.000Z',
 };

@@ -66,3 +66,74 @@ component tests and Playwright smoke tests.
 
 Business pages remain explicit placeholders for subsequent vertical
 feature implementation.
+
+## Public flow checkpoint 1 — Entry
+
+### Scope
+
+- Fetch the published public quiz.
+- Present title, description and question count without rendering answers.
+- Validate the required alias with the approved 80-character limit.
+- Start the participation through the approved endpoint.
+- Store the opaque token in per-tab session storage.
+- Navigate to the existing play route.
+- Allow the same tab to recover an active participation by `publicId`.
+
+### Evidence
+
+- MSW fixtures cover the public quiz and participation contracts.
+- Component tests cover metadata, validation, unavailable quizzes,
+  successful navigation and duplicate aliases.
+- Playwright covers the successful entry flow.
+
+### Checkpoint sequence
+
+1. Resolve and submit the quiz — completed.
+2. Display result and public ranking — completed.
+3. Implement administrative authentication as the fourth overall frontend
+   checkpoint — pending.
+
+## Public flow checkpoint 2 — Resolution
+
+### Scope
+
+- Recover the active attempt without exposing its token in the URL.
+- Render questions and options ordered by contract position.
+- Persist each selected answer per participation and tab.
+- Require exactly one answer for every question before submission.
+- Submit only question and option identifiers with the Participation scheme.
+- Disable controls while submission is pending.
+- Preserve answers after recoverable failures.
+- Navigate to the result route after an accepted or previously completed
+  submission.
+
+### Evidence
+
+- Component tests cover missing sessions, public rendering, incomplete
+  submissions, draft recovery, single submission, authorization headers and
+  recoverable API errors.
+- Playwright covers entry, answer selection, submission and result navigation.
+
+## Public flow checkpoint 3 — Result and ranking
+
+### Scope
+
+- Retrieve the result only with the opaque participation token.
+- Verify that the URL participation matches the per-tab session.
+- Render score, total, percentage, duration and completion time from the
+  backend.
+- Mark completed attempts locally and prevent returning to the player.
+- Render the public ranking without authentication or additional personal
+  data.
+- Support loading, safe error and empty ranking states.
+
+### Evidence
+
+- Component tests cover authorization, authoritative values, invalid tokens,
+  completion state, ranking entries and empty rankings.
+- Duration formatting has deterministic unit tests.
+- Playwright covers the complete public journey through result and ranking.
+
+### Remaining checkpoint
+
+- Implement administrative authentication.

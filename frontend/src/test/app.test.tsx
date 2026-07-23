@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { appRoutes } from '@/app/router';
+import { publicQuizFixture } from '@/mocks/fixtures';
 
 function renderRoute(path: string) {
   const router = createMemoryRouter(appRoutes, { initialEntries: [path] });
@@ -26,10 +27,10 @@ describe('application routing', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders the public quiz route without exposing correct answers', () => {
-    renderRoute('/quiz/public-id');
+  it('renders the public quiz route without exposing correct answers', async () => {
+    renderRoute(`/quiz/${publicQuizFixture.publicId}`);
     expect(
-      screen.getByRole('heading', { name: 'Preparando cuestionario' }),
+      await screen.findByRole('heading', { name: publicQuizFixture.title }),
     ).toBeInTheDocument();
     expect(screen.queryByText(/isCorrect/i)).not.toBeInTheDocument();
   });
