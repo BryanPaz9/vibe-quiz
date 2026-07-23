@@ -66,3 +66,29 @@ component tests and Playwright smoke tests.
 
 Business pages remain explicit placeholders for subsequent vertical
 feature implementation.
+
+## Public flow checkpoint 1 — Entry
+
+### Scope
+
+- Fetch the published public quiz.
+- Present title, description and question count without rendering answers.
+- Validate the required alias with the approved 80-character limit.
+- Start the participation through the approved endpoint.
+- Store the opaque token in per-tab session storage.
+- Navigate to the existing play route.
+- Allow the same tab to recover an active participation by `publicId`.
+
+### Evidence
+
+- MSW fixtures cover the public quiz and participation contracts.
+- Component tests cover metadata, validation, unavailable quizzes,
+  successful navigation and duplicate aliases.
+- Playwright covers the successful entry flow.
+
+### Remaining checkpoints
+
+1. Resolve and submit the quiz.
+2. Display result and public ranking.
+3. Implement administrative authentication as the fourth overall frontend
+   checkpoint.

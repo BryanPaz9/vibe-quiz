@@ -76,5 +76,16 @@ src/
 
 El scaffold y sus fundamentos están completos: rutas, layouts, providers,
 componentes compartidos, cliente REST, tipos contractuales y configuración de
-pruebas. Las pantallas de negocio continúan como marcadores explícitos para las
-siguientes entregas funcionales.
+pruebas.
+
+El primer checkpoint del flujo público también está implementado:
+
+- Consulta de un cuestionario publicado.
+- Presentación de metadatos sin mostrar preguntas ni respuestas correctas.
+- Validación de alias.
+- Inicio de participación.
+- Persistencia del token por pestaña y navegación al jugador.
+- Recuperación de una participación iniciada en la misma pestaña.
+
+La resolución, el envío, el resultado, el ranking y la autenticación
+administrativa continúan reservados para sus siguientes checkpoints.
