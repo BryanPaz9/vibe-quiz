@@ -1,9 +1,23 @@
 import type {
+  AdminIdentity,
+  LoginResponse,
   PublicQuiz,
   ParticipationResult,
   RankingResponse,
   StartParticipationResponse,
 } from '@/shared/types/api';
+
+export const adminFixture: AdminIdentity = {
+  id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+  email: 'admin@vibequiz.test',
+};
+
+export const loginFixture: LoginResponse = {
+  accessToken: 'admin-access-token',
+  tokenType: 'Bearer',
+  expiresIn: 3_600,
+  admin: adminFixture,
+};
 
 export const publicQuizFixture: PublicQuiz = {
   publicId: '11111111-1111-4111-8111-111111111111',

@@ -97,4 +97,12 @@ Los tres checkpoints del flujo público están implementados:
 - Estado de intento completado que impide volver a responder.
 - Ranking público adaptable, incluido su estado vacío.
 
-La autenticación administrativa continúa reservada para el cuarto checkpoint.
+La autenticación administrativa del cuarto checkpoint está implementada:
+
+- Login validado contra `POST /auth/login`.
+- Verificación de identidad mediante `GET /auth/me`.
+- JWT de vida corta almacenado únicamente en memoria.
+- Protección y recuperación de rutas administrativas internas.
+- Limpieza de sesión ante expiración, respuesta `401` o cierre manual.
+
+El CRUD administrativo permanece como la siguiente entrega funcional.

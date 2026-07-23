@@ -146,8 +146,15 @@ marcadores explícitos hasta sus respectivas entregas.
    persistencia temporal, validación completa y envío único.
 3. **Resultado y ranking — implementada:** resultado autorizado, estado
    completado y ranking público.
-4. **Autenticación administrativa — pendiente:** login, identidad,
-   expiración y cierre de sesión.
+4. **Autenticación administrativa — implementada:** login, verificación de
+   identidad, expiración, cierre de sesión y protección de rutas.
+
+La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
+`GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
+exclusivamente en memoria; una recarga, un cierre de sesión, el vencimiento
+local o cualquier `401` administrativo eliminan la sesión. Después del login se
+recupera únicamente una ruta interna bajo `/admin/`, evitando redirecciones
+externas.
 
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto

@@ -15,7 +15,11 @@ export function ProtectedRoute() {
 
   if (!session) {
     return (
-      <Navigate replace state={{ from: location.pathname }} to="/admin/login" />
+      <Navigate
+        replace
+        state={{ from: `${location.pathname}${location.search}` }}
+        to="/admin/login"
+      />
     );
   }
 
