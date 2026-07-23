@@ -1,0 +1,9 @@
+process.env.NODE_ENV = 'test';
+process.env.DATABASE_URL =
+  'postgresql://vibequiz:vibequiz@localhost:5433/vibequiz_test?schema=public';
+process.env.JWT_SECRET = 'test-secret-at-least-32-characters-long';
+process.env.JWT_EXPIRES_IN = '1h';
+process.env.ADMIN_EMAIL = 'admin@vibequiz.test';
+process.env.ADMIN_INITIAL_PASSWORD = 'TestPassword123!';
+process.env.FRONTEND_ORIGIN = 'http://localhost:5173';
+process.env.LOG_LEVEL = 'silent';

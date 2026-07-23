@@ -1,0 +1,188 @@
+{
+  "info": {
+    "_postman_id": "e8ad3a6f-d056-489b-8149-28d1356ef837",
+    "name": "VibeQuiz API",
+    "description": "Flujo local del MVP. Ejecute las solicitudes en orden.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Liveness",
+          "request": { "method": "GET", "url": "{{baseUrl}}/health/live" }
+        },
+        {
+          "name": "Readiness",
+          "request": { "method": "GET", "url": "{{baseUrl}}/health/ready" }
+        },
+        {
+          "name": "OpenAPI JSON",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:3000/api/docs-json"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin flow",
+      "item": [
+        {
+          "name": "1. Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login successful', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('accessToken', pm.response.json().accessToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "2. Create draft quiz",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Quiz created', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.environment.set('quizId', body.id);",
+                  "pm.environment.set('publicId', body.publicId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Quiz desde Postman\",\n  \"description\": \"Prueba del flujo completo\",\n  \"questions\": [\n    {\n      \"text\": \"¿Qué significa IA?\",\n      \"position\": 1,\n      \"options\": [\n        { \"text\": \"Inteligencia Artificial\", \"position\": 1, \"isCorrect\": true },\n        { \"text\": \"Interfaz Automatizada\", \"position\": 2, \"isCorrect\": false }\n      ]\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/admin/quizzes"
+          }
+        },
+        {
+          "name": "3. Publish quiz",
+          "request": {
+            "method": "POST",
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
+            "url": "{{baseUrl}}/admin/quizzes/{{quizId}}/publish"
+          }
+        },
+        {
+          "name": "List quizzes",
+          "request": {
+            "method": "GET",
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
+            "url": "{{baseUrl}}/admin/quizzes?page=1&pageSize=20"
+          }
+        },
+        {
+          "name": "Quiz results",
+          "request": {
+            "method": "GET",
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
+            "url": "{{baseUrl}}/admin/quizzes/{{quizId}}/results?page=1&pageSize=20"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Participant flow",
+      "item": [
+        {
+          "name": "4. Get public quiz",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Correct answers are hidden', () => pm.expect(pm.response.text()).not.to.include('isCorrect'));",
+                  "const body = pm.response.json();",
+                  "pm.environment.set('questionId', body.questions[0].id);",
+                  "pm.environment.set('optionId', body.questions[0].options[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/public/quizzes/{{publicId}}"
+          }
+        },
+        {
+          "name": "5. Start participation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Participation created', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.environment.set('participationId', body.participationId);",
+                  "pm.environment.set('participationToken', body.participationToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alias\": \"{{participantAlias}}\"\n}"
+            },
+            "url": "{{baseUrl}}/public/quizzes/{{publicId}}/participations"
+          }
+        },
+        {
+          "name": "6. Submit answers",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Participation {{participationToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answers\": [\n    {\n      \"questionId\": \"{{questionId}}\",\n      \"optionId\": \"{{optionId}}\"\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/participations/{{participationId}}/submissions"
+          }
+        },
+        {
+          "name": "7. Get result",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Participation {{participationToken}}" }],
+            "url": "{{baseUrl}}/participations/{{participationId}}/result"
+          }
+        },
+        {
+          "name": "8. Public ranking",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/public/quizzes/{{publicId}}/ranking"
+          }
+        }
+      ]
+    }
+  ]
+}
