@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import {
   adminFixture,
+  adminQuizListFixture,
   loginFixture,
   participationFixture,
   participationResultFixture,
@@ -58,6 +59,27 @@ export const handlers = [
       );
     }
     return HttpResponse.json(adminFixture);
+  }),
+  http.get(`${baseUrl}/admin/quizzes`, ({ request }) => {
+    if (
+      request.headers.get('Authorization') !==
+      `Bearer ${loginFixture.accessToken}`
+    ) {
+      return HttpResponse.json(
+        {
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Unauthorized',
+            details: [],
+            requestId: 'request-id',
+            timestamp: '2026-07-23T12:00:00.000Z',
+            path: '/api/v1/admin/quizzes',
+          },
+        },
+        { status: 401 },
+      );
+    }
+    return HttpResponse.json(adminQuizListFixture);
   }),
   http.get(`${baseUrl}/public/quizzes/${publicQuizFixture.publicId}`, () =>
     HttpResponse.json(publicQuizFixture),

@@ -105,4 +105,17 @@ La autenticación administrativa del cuarto checkpoint está implementada:
 - Protección y recuperación de rutas administrativas internas.
 - Limpieza de sesión ante expiración, respuesta `401` o cierre manual.
 
-El CRUD administrativo permanece como la siguiente entrega funcional.
+El primer checkpoint de administración de cuestionarios también está
+implementado y conserva trazabilidad con `FR-003`, `US-003`, `AC-001`,
+`AC-004`, `AC-015` y `AC-016`:
+
+- Consulta Bearer de `GET /admin/quizzes`.
+- Paginación autoritativa mediante la metadata del backend.
+- Búsqueda y filtro por estado sincronizados con la URL.
+- Presentación de estado, cantidades y fechas contractuales.
+- Estados de carga, vacío, búsqueda sin resultados y error con reintento.
+- Navegación hacia los placeholders aprobados de creación y detalle.
+- Limpieza global de la sesión y regreso al login ante `401`.
+
+La creación y el detalle administrativo permanecen como las siguientes
+entregas funcionales.
