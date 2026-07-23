@@ -22,6 +22,7 @@ describe('API client', () => {
     setAdminSession({
       accessToken: 'admin-token',
       admin: { id: 'admin-id', email: 'admin@example.com' },
+      expiresAt: Date.now() + 60_000,
     });
     server.use(
       http.get('http://localhost:3000/api/v1/auth/me', ({ request }) => {
@@ -60,6 +61,7 @@ describe('API client', () => {
     setAdminSession({
       accessToken: 'expired-token',
       admin: { id: 'admin-id', email: 'admin@example.com' },
+      expiresAt: Date.now() + 60_000,
     });
     server.use(
       http.get('http://localhost:3000/api/v1/auth/me', () =>

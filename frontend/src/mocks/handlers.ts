@@ -1,16 +1,64 @@
 import { http, HttpResponse } from 'msw';
 import {
+  adminFixture,
+  loginFixture,
   participationFixture,
   participationResultFixture,
   publicQuizFixture,
   rankingFixture,
 } from './fixtures';
-import type { StartParticipationRequest } from '@/shared/types/api';
+import type {
+  LoginRequest,
+  StartParticipationRequest,
+} from '@/shared/types/api';
 
 const baseUrl = 'http://localhost:3000/api/v1';
 
 export const handlers = [
   http.get(`${baseUrl}/health/live`, () => HttpResponse.json({ status: 'ok' })),
+  http.post(`${baseUrl}/auth/login`, async ({ request }) => {
+    const body = (await request.json()) as LoginRequest;
+    if (
+      body.email !== adminFixture.email ||
+      body.password !== 'correct-password'
+    ) {
+      return HttpResponse.json(
+        {
+          error: {
+            code: 'INVALID_CREDENTIALS',
+            message: 'Invalid credentials',
+            details: [],
+            requestId: 'request-id',
+            timestamp: '2026-07-23T12:00:00.000Z',
+            path: '/api/v1/auth/login',
+          },
+        },
+        { status: 401 },
+      );
+    }
+    return HttpResponse.json(loginFixture);
+  }),
+  http.get(`${baseUrl}/auth/me`, ({ request }) => {
+    if (
+      request.headers.get('Authorization') !==
+      `Bearer ${loginFixture.accessToken}`
+    ) {
+      return HttpResponse.json(
+        {
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Unauthorized',
+            details: [],
+            requestId: 'request-id',
+            timestamp: '2026-07-23T12:00:00.000Z',
+            path: '/api/v1/auth/me',
+          },
+        },
+        { status: 401 },
+      );
+    }
+    return HttpResponse.json(adminFixture);
+  }),
   http.get(`${baseUrl}/public/quizzes/${publicQuizFixture.publicId}`, () =>
     HttpResponse.json(publicQuizFixture),
   ),

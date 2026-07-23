@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
+  adminFixture,
+  loginFixture,
   participationFixture,
   participationResultFixture,
   publicQuizFixture,
@@ -15,6 +17,41 @@ test('renders the application shell', async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page.getByRole('link', { name: 'VibeQuiz' })).toBeVisible();
+});
+
+test('authenticates and closes the administrative session', async ({
+  page,
+}) => {
+  await page.route('**/api/v1/auth/login', async (route) => {
+    expect(route.request().postDataJSON()).toEqual({
+      email: adminFixture.email,
+      password: 'correct-password',
+    });
+    await route.fulfill({ json: loginFixture });
+  });
+  await page.route('**/api/v1/auth/me', async (route) => {
+    expect(route.request().headers()['authorization']).toBe(
+      `Bearer ${loginFixture.accessToken}`,
+    );
+    await route.fulfill({ json: adminFixture });
+  });
+  await page.goto('/admin/quizzes');
+
+  await expect(
+    page.getByRole('heading', { name: 'Iniciar sesión' }),
+  ).toBeVisible();
+  await page.getByLabel('Correo electrónico').fill(adminFixture.email);
+  await page.getByLabel('Contraseña').fill('correct-password');
+  await page.getByRole('button', { name: 'Ingresar' }).click();
+
+  await expect(
+    page.getByRole('heading', { name: 'Cuestionarios' }),
+  ).toBeVisible();
+  await expect(page.getByText(adminFixture.email)).toBeVisible();
+  await page.getByRole('button', { name: 'Cerrar sesión' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Iniciar sesión' }),
+  ).toBeVisible();
 });
 
 test('starts, resolves and submits a public quiz', async ({ page }) => {

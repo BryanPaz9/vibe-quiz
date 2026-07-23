@@ -91,7 +91,7 @@ feature implementation.
 1. Resolve and submit the quiz — completed.
 2. Display result and public ranking — completed.
 3. Implement administrative authentication as the fourth overall frontend
-   checkpoint — pending.
+   checkpoint — completed.
 
 ## Public flow checkpoint 2 — Resolution
 
@@ -134,6 +134,25 @@ feature implementation.
 - Duration formatting has deterministic unit tests.
 - Playwright covers the complete public journey through result and ranking.
 
-### Remaining checkpoint
+## Administrative authentication checkpoint 4
 
-- Implement administrative authentication.
+### Scope
+
+- Validate the login form without publishing or pre-filling credentials.
+- Authenticate through the approved login endpoint and verify `/auth/me`.
+- Keep the short-lived JWT exclusively in memory.
+- Restore only protected internal destinations after a successful login.
+- Clear the session after expiration, an administrative `401`, or logout.
+- Display the verified administrator identity in the protected layout.
+
+### Evidence
+
+- Component tests cover form validation, invalid credentials, identity
+  verification, protected-route restoration, expiration and logout.
+- API client tests cover the Bearer scheme and session clearing after `401`.
+- Playwright covers login, access to the administrative shell and logout.
+
+### Remaining frontend work
+
+- Implement the administrative quiz management verticals against the approved
+  `/admin/quizzes` contracts.
