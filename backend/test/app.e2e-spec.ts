@@ -84,6 +84,8 @@ describe('VibeQuiz API', () => {
       .expect(200);
     token = response.body.accessToken as string;
     expect(token).toBeTruthy();
+    expect(response.body.expiresIn).toBe(3600);
+    expect(typeof response.body.expiresIn).toBe('number');
   });
 
   it('completes the quiz lifecycle without exposing correct answers', async () => {

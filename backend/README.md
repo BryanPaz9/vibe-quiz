@@ -63,6 +63,10 @@ El contrato aprobado se encuentra en
 el seed. No son requisitos para iniciar la API una vez provisionado el
 administrador.
 
+`JWT_EXPIRES_IN` acepta segundos o duraciones con sufijo (`s`, `m`, `h`,
+`d`). La respuesta de login siempre expone `expiresIn` como segundos
+numéricos, según el contrato REST.
+
 ## Postman
 
 Importe los dos archivos de `../postman/`, seleccione el environment
