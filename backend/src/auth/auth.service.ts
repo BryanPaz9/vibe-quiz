@@ -5,6 +5,7 @@ import { compare } from 'bcryptjs';
 import { ApiError } from '../common/api-error';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
+import { expirationToSeconds } from './token-expiration';
 
 @Injectable()
 export class AuthService {
@@ -29,10 +30,14 @@ export class AuthService {
       );
     }
 
-    const expiresIn = this.config.get<string>('JWT_EXPIRES_IN', '1h');
+    const configuredExpiration = this.config.get<string>(
+      'JWT_EXPIRES_IN',
+      '1h',
+    );
+    const expiresIn = expirationToSeconds(configuredExpiration);
     const accessToken = await this.jwt.signAsync(
       { sub: admin.id, email: admin.email, role: 'admin' },
-      { expiresIn: expiresIn as never, algorithm: 'HS256' },
+      { expiresIn, algorithm: 'HS256' },
     );
 
     return {
