@@ -10,6 +10,7 @@ export interface ParticipationSession {
   quizPublicId: string;
   alias: string;
   quiz?: PublicQuiz;
+  status?: 'ACTIVE' | 'COMPLETED';
 }
 
 export type ParticipationAnswerDraft = Record<string, string>;
@@ -116,6 +117,13 @@ export function getParticipationSessionByQuiz(
     return null;
   }
   return session;
+}
+
+export function markParticipationCompleted(participationId: string): void {
+  const session = getParticipationSession(participationId);
+  if (!session) return;
+  saveParticipationSession({ ...session, status: 'COMPLETED' });
+  clearParticipationAnswers(participationId);
 }
 
 export function clearParticipationSession(participationId: string): void {

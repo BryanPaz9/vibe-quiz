@@ -49,6 +49,30 @@ export const handlers = [
     },
   ),
   http.get(
+    `${baseUrl}/participations/${participationFixture.participationId}/result`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Participation ${participationFixture.participationToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'INVALID_PARTICIPATION_TOKEN',
+              message: 'Invalid participation token',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/participations/${participationFixture.participationId}/result`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json(participationResultFixture);
+    },
+  ),
+  http.get(
     `${baseUrl}/public/quizzes/${publicQuizFixture.publicId}/ranking`,
     () => HttpResponse.json(rankingFixture),
   ),

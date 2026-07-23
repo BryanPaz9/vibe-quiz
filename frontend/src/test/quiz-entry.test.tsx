@@ -112,6 +112,7 @@ describe('public quiz entry', () => {
       quizPublicId: publicQuizFixture.publicId,
       alias: 'Grace Hopper',
       quiz: publicQuizFixture,
+      status: 'ACTIVE',
     });
   });
 

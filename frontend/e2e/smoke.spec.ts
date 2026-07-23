@@ -3,6 +3,7 @@ import {
   participationFixture,
   participationResultFixture,
   publicQuizFixture,
+  rankingFixture,
 } from '../src/mocks/fixtures';
 
 test('renders the application shell', async ({ page }) => {
@@ -45,6 +46,21 @@ test('starts, resolves and submits a public quiz', async ({ page }) => {
       });
     },
   );
+  await page.route(
+    `**/api/v1/participations/${participationFixture.participationId}/result`,
+    async (route) => {
+      expect(route.request().headers()['authorization']).toBe(
+        `Participation ${participationFixture.participationToken}`,
+      );
+      await route.fulfill({ json: participationResultFixture });
+    },
+  );
+  await page.route(
+    `**/api/v1/public/quizzes/${publicQuizFixture.publicId}/ranking`,
+    async (route) => {
+      await route.fulfill({ json: rankingFixture });
+    },
+  );
   await page.goto(`/quiz/${publicQuizFixture.publicId}`);
 
   await expect(
@@ -67,4 +83,11 @@ test('starts, resolves and submits a public quiz', async ({ page }) => {
       `/quiz/${publicQuizFixture.publicId}/result/${participationFixture.participationId}$`,
     ),
   );
+  await expect(page.getByText('100%', { exact: true }).first()).toBeVisible();
+  await page.getByRole('link', { name: 'Ver tabla de clasificación' }).click();
+
+  await expect(
+    page.getByRole('heading', { name: 'Tabla de clasificación' }),
+  ).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Ada Tú' })).toBeVisible();
 });

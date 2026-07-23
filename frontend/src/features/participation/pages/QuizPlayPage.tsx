@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { usePublicQuiz } from '@/features/participation/hooks/use-public-quiz';
 import { useSubmitParticipation } from '@/features/participation/hooks/use-submit-participation';
 import {
-  clearParticipationAnswers,
   clearParticipationSession,
   getParticipationAnswers,
   getParticipationSessionByQuiz,
+  markParticipationCompleted,
   saveParticipationAnswers,
   type ParticipationAnswerDraft,
 } from '@/features/participation/session/participation-session';
@@ -71,6 +71,15 @@ export default function QuizPlayPage() {
     );
   }
 
+  if (session.status === 'COMPLETED') {
+    return (
+      <Navigate
+        replace
+        to={`/quiz/${publicId}/result/${session.participationId}`}
+      />
+    );
+  }
+
   if (!quiz && quizQuery.isPending) {
     return (
       <PageContainer eyebrow="Participación" title="Cargando preguntas">
@@ -131,14 +140,14 @@ export default function QuizPlayPage() {
           optionId: answers[question.id]!,
         })),
       });
-      clearParticipationAnswers(session.participationId);
+      markParticipationCompleted(session.participationId);
       navigate(`/quiz/${publicId}/result/${session.participationId}`);
     } catch (error: unknown) {
       if (
         error instanceof ApiError &&
         error.code === 'PARTICIPATION_COMPLETED'
       ) {
-        clearParticipationAnswers(session.participationId);
+        markParticipationCompleted(session.participationId);
         navigate(`/quiz/${publicId}/result/${session.participationId}`);
         return;
       }

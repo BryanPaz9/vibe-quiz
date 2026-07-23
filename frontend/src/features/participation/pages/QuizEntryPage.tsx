@@ -103,6 +103,7 @@ export default function QuizEntryPage() {
         quizPublicId: participation.quizPublicId,
         alias: participation.alias,
         quiz,
+        status: 'ACTIVE',
       });
       navigate(`/quiz/${participation.quizPublicId}/play`);
     } catch (error: unknown) {
@@ -142,13 +143,33 @@ export default function QuizEntryPage() {
         <section className="panel entry-card">
           {existingSession ? (
             <>
-              <p className="page-header__eyebrow">Intento activo</p>
-              <h2>Continúa como {existingSession.alias}</h2>
-              <p className="muted">
-                Encontramos una participación iniciada en esta pestaña.
+              <p className="page-header__eyebrow">
+                {existingSession.status === 'COMPLETED'
+                  ? 'Intento completado'
+                  : 'Intento activo'}
               </p>
-              <Button onClick={() => navigate(`/quiz/${publicId}/play`)}>
-                Continuar cuestionario
+              <h2>
+                {existingSession.status === 'COMPLETED'
+                  ? `Resultado de ${existingSession.alias}`
+                  : `Continúa como ${existingSession.alias}`}
+              </h2>
+              <p className="muted">
+                {existingSession.status === 'COMPLETED'
+                  ? 'Esta participación ya fue enviada.'
+                  : 'Encontramos una participación iniciada en esta pestaña.'}
+              </p>
+              <Button
+                onClick={() =>
+                  navigate(
+                    existingSession.status === 'COMPLETED'
+                      ? `/quiz/${publicId}/result/${existingSession.participationId}`
+                      : `/quiz/${publicId}/play`,
+                  )
+                }
+              >
+                {existingSession.status === 'COMPLETED'
+                  ? 'Ver resultado'
+                  : 'Continuar cuestionario'}
               </Button>
             </>
           ) : (
