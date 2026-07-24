@@ -8,9 +8,12 @@ export function RootLayout() {
       </a>
       <header className="site-header">
         <Link className="brand" to="/">
-          <span className="brand__mark" aria-hidden="true">
-            V
-          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            className="brand__mark"
+            src="/brand/vq-isotipo.png"
+          />
           <span>VibeQuiz</span>
         </Link>
         <nav aria-label="Navegación principal">

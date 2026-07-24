@@ -136,6 +136,9 @@ test('authenticates and creates an administrative quiz', async ({ page }) => {
   await page.getByRole('button', { name: 'Ingresar' }).click();
   await page.getByRole('link', { name: 'Crear cuestionario' }).click();
 
+  await expect(
+    page.getByRole('button', { name: 'Nueva pregunta' }),
+  ).toBeVisible();
   await page.getByLabel('Título').fill('Arquitectura web');
   await page.getByLabel('Descripción (opcional)').fill('Evaluación del módulo');
   await page
@@ -378,6 +381,7 @@ test('starts, resolves and submits a public quiz', async ({ page }) => {
   await expect(page).toHaveURL(
     new RegExp(`/quiz/${publicQuizFixture.publicId}/play$`),
   );
+  await expect(page.getByRole('timer')).toBeVisible();
   await page.getByRole('radio', { name: 'Inteligencia Artificial' }).check();
   await page.getByRole('button', { name: 'Finalizar cuestionario' }).click();
 

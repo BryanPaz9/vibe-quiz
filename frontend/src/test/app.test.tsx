@@ -25,6 +25,16 @@ describe('application routing', () => {
         name: 'Crea, comparte y responde cuestionarios',
       }),
     ).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'VibeQuiz' })).toHaveAttribute(
+      'src',
+      '/brand/vq-logo.png',
+    );
+    expect(
+      screen.getByRole('heading', {
+        name: 'De una idea a resultados en tres pasos',
+      }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Scaffold activo')).not.toBeInTheDocument();
   });
 
   it('renders the public quiz route without exposing correct answers', async () => {

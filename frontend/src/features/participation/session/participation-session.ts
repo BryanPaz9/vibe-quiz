@@ -9,6 +9,7 @@ export interface ParticipationSession {
   participationToken: string;
   quizPublicId: string;
   alias: string;
+  startedAt?: string;
   quiz?: PublicQuiz;
   status?: 'ACTIVE' | 'COMPLETED';
 }
@@ -34,7 +35,8 @@ function isParticipationSession(value: unknown): value is ParticipationSession {
     typeof session.participationId === 'string' &&
     typeof session.participationToken === 'string' &&
     typeof session.quizPublicId === 'string' &&
-    typeof session.alias === 'string'
+    typeof session.alias === 'string' &&
+    (session.startedAt === undefined || typeof session.startedAt === 'string')
   );
 }
 

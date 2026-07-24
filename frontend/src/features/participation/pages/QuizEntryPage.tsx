@@ -102,6 +102,7 @@ export default function QuizEntryPage() {
         participationToken: participation.participationToken,
         quizPublicId: participation.quizPublicId,
         alias: participation.alias,
+        startedAt: participation.startedAt,
         quiz,
         status: 'ACTIVE',
       });

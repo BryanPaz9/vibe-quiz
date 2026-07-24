@@ -111,6 +111,7 @@ describe('public quiz entry', () => {
       participationToken: participationFixture.participationToken,
       quizPublicId: publicQuizFixture.publicId,
       alias: 'Grace Hopper',
+      startedAt: participationFixture.startedAt,
       quiz: publicQuizFixture,
       status: 'ACTIVE',
     });

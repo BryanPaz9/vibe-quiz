@@ -1,3 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faListCheck,
+  faRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
 import { useSyncExternalStore } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
@@ -26,10 +31,14 @@ export function AdminLayout() {
         <p className="admin-nav__label">Panel administrativo</p>
         <p className="admin-nav__identity">{session?.admin.email}</p>
         <nav aria-label="Administración">
-          <NavLink to="/admin/quizzes">Cuestionarios</NavLink>
+          <NavLink to="/admin/quizzes">
+            <FontAwesomeIcon aria-hidden="true" icon={faListCheck} />
+            <span>Cuestionarios</span>
+          </NavLink>
         </nav>
         <Button onClick={logout} type="button" variant="secondary">
-          Cerrar sesión
+          <FontAwesomeIcon aria-hidden="true" icon={faRightFromBracket} />
+          <span>Cerrar sesión</span>
         </Button>
       </aside>
       <div className="admin-content">

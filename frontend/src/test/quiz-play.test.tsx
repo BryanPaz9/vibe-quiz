@@ -22,6 +22,7 @@ function storeActiveParticipation(): void {
     participationToken: participationFixture.participationToken,
     quizPublicId: publicQuizFixture.publicId,
     alias: participationFixture.alias,
+    startedAt: participationFixture.startedAt,
     quiz: publicQuizFixture,
   });
 }
@@ -63,6 +64,9 @@ describe('public quiz resolution', () => {
     expect(
       screen.getByRole('heading', { name: publicQuizFixture.title }),
     ).toBeInTheDocument();
+    expect(screen.getByRole('timer')).toHaveAccessibleName(
+      /Tiempo transcurrido:/,
+    );
     expect(
       screen.getByRole('group', { name: /¿Qué significa IA\?/ }),
     ).toBeInTheDocument();

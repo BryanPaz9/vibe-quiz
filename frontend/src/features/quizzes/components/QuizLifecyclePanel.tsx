@@ -1,3 +1,10 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faCopy,
+  faLock,
+  faPaperPlane,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -125,10 +132,12 @@ export function QuizLifecyclePanel({ quiz }: { quiz: AdminQuizDetail }) {
           </p>
           <div className="page-actions">
             <Button onClick={() => openConfirmation('publish')}>
-              Publicar cuestionario
+              <FontAwesomeIcon aria-hidden="true" icon={faPaperPlane} />
+              <span>Publicar cuestionario</span>
             </Button>
             <Button onClick={() => openConfirmation('delete')} variant="danger">
-              Eliminar borrador
+              <FontAwesomeIcon aria-hidden="true" icon={faTrashCan} />
+              <span>Eliminar borrador</span>
             </Button>
           </div>
         </>
@@ -145,7 +154,8 @@ export function QuizLifecyclePanel({ quiz }: { quiz: AdminQuizDetail }) {
               {publicUrl}
             </a>
             <Button onClick={() => void copyPublicUrl()} variant="secondary">
-              Copiar enlace
+              <FontAwesomeIcon aria-hidden="true" icon={faCopy} />
+              <span>Copiar enlace</span>
             </Button>
           </div>
           {copyStatus === 'success' && (
@@ -160,7 +170,8 @@ export function QuizLifecyclePanel({ quiz }: { quiz: AdminQuizDetail }) {
           )}
           <div className="page-actions">
             <Button onClick={() => openConfirmation('close')} variant="danger">
-              Cerrar cuestionario
+              <FontAwesomeIcon aria-hidden="true" icon={faLock} />
+              <span>Cerrar cuestionario</span>
             </Button>
           </div>
         </>

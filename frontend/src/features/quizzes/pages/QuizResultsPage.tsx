@@ -1,3 +1,5 @@
+import { faRankingStar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useAdminQuizResults } from '@/features/quizzes/hooks/use-admin-quiz-results';
 import {
@@ -96,7 +98,8 @@ export function QuizResultsPage() {
           className="button button--secondary"
           to={`/admin/quizzes/${id}/ranking`}
         >
-          Ver ranking
+          <FontAwesomeIcon aria-hidden="true" icon={faRankingStar} />
+          <span>Ver ranking</span>
         </Link>
       }
       eyebrow="Administración"
