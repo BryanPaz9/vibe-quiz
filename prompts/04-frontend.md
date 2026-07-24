@@ -313,3 +313,36 @@ feature implementation.
 
 - Run the final integrated browser-validation checkpoint against the real
   backend and its supported database.
+
+## User experience improvements checkpoint
+
+### Scope
+
+- Apply the supplied VibeQuiz favicon, logo and isotype.
+- Replace emoji controls with Font Awesome Free 6.7.2 icons.
+- Keep visible text beside icons for navigation, destructive actions, results,
+  ranking and logout; use icon-only controls only when compact ordering
+  controls retain accessible names and tooltips.
+- Center the administrative login and replace the scaffold landing content
+  with product context and a three-step journey.
+- Reuse query loaders and mutation-button spinners for pending requests.
+- Add Motion transitions to quiz creation and participation while respecting
+  the user's reduced-motion preference.
+- Preserve the approved in-memory-only administrative session model.
+
+### Decisions
+
+- `@fortawesome/fontawesome-svg-core` and
+  `@fortawesome/free-solid-svg-icons` are pinned to `6.7.2`; the supported
+  React adapter is versioned separately.
+- Motion is loaded through `LazyMotion` with `domAnimation` to limit bundle
+  impact.
+- Reload persistence remains out of scope because the approved backend
+  contract has no refresh-token flow.
+
+### Evidence
+
+- Existing component and browser journeys continue asserting accessible names
+  despite decorative icons and motion wrappers.
+- Production build, lint, formatting, unit/component tests and Playwright
+  validate the checkpoint.

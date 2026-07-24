@@ -74,7 +74,11 @@ export default function LoginPage() {
   });
 
   return (
-    <PageContainer eyebrow="Administración" title="Iniciar sesión">
+    <PageContainer
+      className="auth-page"
+      eyebrow="Administración"
+      title="Iniciar sesión"
+    >
       <section className="panel auth-card">
         <p className="muted">
           Accede con las credenciales del administrador configurado para

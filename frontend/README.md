@@ -160,3 +160,19 @@ El checkpoint de ciclo de vida administrativo está implementado:
 
 Permanece la validación funcional final del sistema en navegadores contra el
 backend integrado.
+
+El checkpoint de experiencia visual incorpora:
+
+- Favicon, logotipo e isotipo oficiales de VibeQuiz.
+- Landing informativa con contexto del flujo de creación, publicación y
+  resultados.
+- Login administrativo centrado.
+- Font Awesome Free 6.7.2 con texto en acciones principales y etiquetas
+  accesibles en controles que muestran únicamente el icono.
+- Indicadores de carga en consultas y botones con mutaciones pendientes.
+- Motion para transiciones en edición y resolución, respetando la preferencia
+  de movimiento reducido del sistema.
+
+La sesión administrativa continúa exclusivamente en memoria por decisión de
+seguridad. Una recarga requiere autenticarse nuevamente; persistencia o
+renovación necesitarían un contrato de refresh token independiente.

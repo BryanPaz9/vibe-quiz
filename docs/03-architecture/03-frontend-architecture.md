@@ -163,6 +163,9 @@ marcadores explícitos hasta sus respectivas entregas.
 9. **Ciclo de vida administrativo — implementado:** publicación de borradores,
    enlace público copiable, cierre de cuestionarios publicados y eliminación
    confirmada de borradores elegibles.
+10. **Experiencia visual — implementada:** identidad de marca, landing
+    informativa, iconografía funcional, login centrado, indicadores de carga y
+    transiciones accesibles en creación y participación.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
 `GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
@@ -211,6 +214,15 @@ con la respuesta aprobada; el cierre vuelve a consultar el estado autoritativo
 y las tres operaciones invalidan el listado administrativo afectado. Un
 rechazo recuperable conserva la página y un `401` reutiliza la limpieza global
 de sesión.
+
+La identidad visual vive en `public/brand` y se reutiliza en el encabezado y la
+landing sin introducir llamadas externas. Font Awesome Free 6.7.2 aporta
+iconos SVG importados individualmente; las acciones principales conservan
+texto visible y los controles compactos mantienen nombre accesible y tooltip.
+Motion utiliza `LazyMotion` y respeta `prefers-reduced-motion`. Las animaciones
+decoran cambios de preguntas, opciones y selección sin modificar estado de
+negocio ni retrasar solicitudes. Los estados pendientes continúan
+representados por loaders de consulta y spinners en botones de mutación.
 
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto

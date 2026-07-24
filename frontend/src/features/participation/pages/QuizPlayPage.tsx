@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { m } from 'motion/react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { usePublicQuiz } from '@/features/participation/hooks/use-public-quiz';
 import { useSubmitParticipation } from '@/features/participation/hooks/use-submit-participation';
@@ -175,11 +176,18 @@ export default function QuizPlayPage() {
     >
       <div className="quiz-player">
         {questions.map((question, questionIndex) => (
-          <fieldset
+          <m.fieldset
+            animate={{ opacity: 1, y: 0 }}
             className="panel question-card"
             id={`question-${question.id}`}
+            initial={{ opacity: 0, y: 18 }}
             key={question.id}
+            layout
             tabIndex={-1}
+            transition={{
+              delay: Math.min(questionIndex * 0.06, 0.3),
+              duration: 0.28,
+            }}
           >
             <legend>
               <span>Pregunta {questionIndex + 1}</span>
@@ -189,7 +197,17 @@ export default function QuizPlayPage() {
               {[...question.options]
                 .sort((first, second) => first.position - second.position)
                 .map((option) => (
-                  <label className="quiz-option" key={option.id}>
+                  <m.label
+                    animate={
+                      answers[question.id] === option.id
+                        ? { scale: 1.01 }
+                        : { scale: 1 }
+                    }
+                    className="quiz-option"
+                    key={option.id}
+                    transition={{ duration: 0.15 }}
+                    whileHover={{ x: 3 }}
+                  >
                     <input
                       checked={answers[question.id] === option.id}
                       disabled={submitMutation.isPending}
@@ -199,10 +217,10 @@ export default function QuizPlayPage() {
                       value={option.id}
                     />
                     <span>{option.text}</span>
-                  </label>
+                  </m.label>
                 ))}
             </div>
-          </fieldset>
+          </m.fieldset>
         ))}
 
         <section className="panel submission-panel">

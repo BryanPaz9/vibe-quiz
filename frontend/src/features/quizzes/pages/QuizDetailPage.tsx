@@ -1,3 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChartColumn,
+  faRankingStar,
+} from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams } from 'react-router-dom';
 import { QuizLifecyclePanel } from '@/features/quizzes/components/QuizLifecyclePanel';
 import { QuizContentForm } from '@/features/quizzes/components/QuizContentForm';
@@ -148,13 +153,15 @@ export function QuizDetailPage() {
             className="button button--secondary"
             to={`/admin/quizzes/${id}/results`}
           >
-            Resultados
+            <FontAwesomeIcon aria-hidden="true" icon={faChartColumn} />
+            <span>Resultados</span>
           </Link>
           <Link
             className="button button--secondary"
             to={`/admin/quizzes/${id}/ranking`}
           >
-            Ranking
+            <FontAwesomeIcon aria-hidden="true" icon={faRankingStar} />
+            <span>Ranking</span>
           </Link>
         </div>
       }

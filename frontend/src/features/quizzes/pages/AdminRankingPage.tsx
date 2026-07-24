@@ -1,3 +1,5 @@
+import { faChartColumn } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useParams } from 'react-router-dom';
 import { useAdminQuizRanking } from '@/features/quizzes/hooks/use-admin-quiz-results';
 import {
@@ -69,7 +71,8 @@ export function AdminRankingPage() {
           className="button button--secondary"
           to={`/admin/quizzes/${id}/results`}
         >
-          Ver resultados
+          <FontAwesomeIcon aria-hidden="true" icon={faChartColumn} />
+          <span>Ver resultados</span>
         </Link>
       }
       eyebrow="Administración"

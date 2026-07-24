@@ -1,4 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowDown,
+  faArrowUp,
+  faPlus,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
+import { AnimatePresence, m } from 'motion/react';
 import {
   type Control,
   type FieldErrors,
@@ -81,7 +89,8 @@ function QuestionEditor({
           type="button"
           variant="secondary"
         >
-          Subir pregunta
+          <FontAwesomeIcon aria-hidden="true" icon={faArrowUp} />
+          <span>Subir pregunta</span>
         </Button>
         <Button
           disabled={isLast}
@@ -89,10 +98,12 @@ function QuestionEditor({
           type="button"
           variant="secondary"
         >
-          Bajar pregunta
+          <FontAwesomeIcon aria-hidden="true" icon={faArrowDown} />
+          <span>Bajar pregunta</span>
         </Button>
         <Button onClick={onRemove} type="button" variant="danger">
-          Eliminar pregunta
+          <FontAwesomeIcon aria-hidden="true" icon={faTrashCan} />
+          <span>Eliminar pregunta</span>
         </Button>
       </div>
 
@@ -105,58 +116,70 @@ function QuestionEditor({
 
       <div className="quiz-editor-options">
         <h2>Opciones</h2>
-        {optionFields.map((field, optionIndex) => (
-          <div className="quiz-editor-option" key={field.id}>
-            <label className="quiz-editor-correct">
-              <input
-                aria-label={`Marcar opción ${optionIndex + 1} como correcta`}
-                checked={Boolean(options?.[optionIndex]?.isCorrect)}
-                name={`correct-question-${index}`}
-                onChange={() => selectCorrectOption(optionIndex)}
-                type="radio"
+        <AnimatePresence initial={false}>
+          {optionFields.map((field, optionIndex) => (
+            <m.div
+              animate={{ opacity: 1, y: 0 }}
+              className="quiz-editor-option"
+              exit={{ opacity: 0, scale: 0.97 }}
+              initial={{ opacity: 0, y: 10 }}
+              key={field.id}
+              layout
+              transition={{ duration: 0.2 }}
+            >
+              <label className="quiz-editor-correct">
+                <input
+                  aria-label={`Marcar opción ${optionIndex + 1} como correcta`}
+                  checked={Boolean(options?.[optionIndex]?.isCorrect)}
+                  name={`correct-question-${index}`}
+                  onChange={() => selectCorrectOption(optionIndex)}
+                  type="radio"
+                />
+                Correcta
+              </label>
+              <Input
+                error={
+                  errors.questions?.[index]?.options?.[optionIndex]?.text
+                    ?.message
+                }
+                label={`Opción ${optionIndex + 1}`}
+                maxLength={500}
+                {...register(`questions.${index}.options.${optionIndex}.text`)}
               />
-              Correcta
-            </label>
-            <Input
-              error={
-                errors.questions?.[index]?.options?.[optionIndex]?.text?.message
-              }
-              label={`Opción ${optionIndex + 1}`}
-              maxLength={500}
-              {...register(`questions.${index}.options.${optionIndex}.text`)}
-            />
-            <div className="quiz-editor-option__actions">
-              <Button
-                aria-label="Subir opción"
-                disabled={optionIndex === 0}
-                onClick={() => moveOption(optionIndex, optionIndex - 1)}
-                title="Subir opción"
-                type="button"
-                variant="secondary"
-              >
-                <span aria-hidden="true">⬆️</span>
-              </Button>
-              <Button
-                aria-label="Bajar opción"
-                disabled={optionIndex === optionFields.length - 1}
-                onClick={() => moveOption(optionIndex, optionIndex + 1)}
-                title="Bajar opción"
-                type="button"
-                variant="secondary"
-              >
-                <span aria-hidden="true">⬇️</span>
-              </Button>
-              <Button
-                disabled={optionFields.length <= 2}
-                onClick={() => removeOption(optionIndex)}
-                type="button"
-                variant="danger"
-              >
-                Eliminar opción
-              </Button>
-            </div>
-          </div>
-        ))}
+              <div className="quiz-editor-option__actions">
+                <Button
+                  aria-label="Subir opción"
+                  disabled={optionIndex === 0}
+                  onClick={() => moveOption(optionIndex, optionIndex - 1)}
+                  title="Subir opción"
+                  type="button"
+                  variant="secondary"
+                >
+                  <FontAwesomeIcon aria-hidden="true" icon={faArrowUp} />
+                </Button>
+                <Button
+                  aria-label="Bajar opción"
+                  disabled={optionIndex === optionFields.length - 1}
+                  onClick={() => moveOption(optionIndex, optionIndex + 1)}
+                  title="Bajar opción"
+                  type="button"
+                  variant="secondary"
+                >
+                  <FontAwesomeIcon aria-hidden="true" icon={faArrowDown} />
+                </Button>
+                <Button
+                  disabled={optionFields.length <= 2}
+                  onClick={() => removeOption(optionIndex)}
+                  type="button"
+                  variant="danger"
+                >
+                  <FontAwesomeIcon aria-hidden="true" icon={faTrashCan} />
+                  <span>Eliminar opción</span>
+                </Button>
+              </div>
+            </m.div>
+          ))}
+        </AnimatePresence>
         {optionGroupError && (
           <p className="field__error" role="alert">
             {optionGroupError}
@@ -167,7 +190,8 @@ function QuestionEditor({
           type="button"
           variant="secondary"
         >
-          Agregar opción
+          <FontAwesomeIcon aria-hidden="true" icon={faPlus} />
+          <span>Agregar opción</span>
         </Button>
       </div>
     </fieldset>
@@ -264,25 +288,36 @@ export function QuizContentForm({
           type="button"
           variant="secondary"
         >
-          Agregar pregunta
+          <FontAwesomeIcon aria-hidden="true" icon={faPlus} />
+          <span>Agregar pregunta</span>
         </Button>
       </div>
 
-      {questionFields.map((field, index) => (
-        <QuestionEditor
-          control={control}
-          errors={errors}
-          index={index}
-          isFirst={index === 0}
-          isLast={index === questionFields.length - 1}
-          key={field.id}
-          onMoveDown={() => moveQuestion(index, index + 1)}
-          onMoveUp={() => moveQuestion(index, index - 1)}
-          onRemove={() => removeQuestion(index)}
-          register={register}
-          setValue={setValue}
-        />
-      ))}
+      <AnimatePresence initial={false}>
+        {questionFields.map((field, index) => (
+          <m.div
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            initial={{ opacity: 0, y: 14 }}
+            key={field.id}
+            layout
+            transition={{ duration: 0.24 }}
+          >
+            <QuestionEditor
+              control={control}
+              errors={errors}
+              index={index}
+              isFirst={index === 0}
+              isLast={index === questionFields.length - 1}
+              onMoveDown={() => moveQuestion(index, index + 1)}
+              onMoveUp={() => moveQuestion(index, index - 1)}
+              onRemove={() => removeQuestion(index)}
+              register={register}
+              setValue={setValue}
+            />
+          </m.div>
+        ))}
+      </AnimatePresence>
 
       {errors.questions?.root?.message && (
         <p className="field__error" role="alert">
