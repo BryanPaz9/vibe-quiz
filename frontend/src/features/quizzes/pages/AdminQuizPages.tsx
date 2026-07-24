@@ -11,10 +11,11 @@ import {
   PageContainer,
   Select,
 } from '@/shared/components';
-import { PlaceholderPage } from '@/shared/components/PlaceholderPage';
 import type { QuizStatus } from '@/shared/types/api';
+export { AdminRankingPage } from './AdminRankingPage';
 export { QuizCreatePage } from './QuizCreatePage';
 export { QuizDetailPage } from './QuizDetailPage';
+export { QuizResultsPage } from './QuizResultsPage';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 20;
@@ -243,23 +244,5 @@ export function QuizListPage() {
         </>
       )}
     </PageContainer>
-  );
-}
-
-export function QuizResultsPage() {
-  return (
-    <PlaceholderPage
-      description="Resultados paginados de las participaciones asociadas."
-      title="Resultados"
-    />
-  );
-}
-
-export function AdminRankingPage() {
-  return (
-    <PlaceholderPage
-      description="Ranking administrativo de participaciones completadas."
-      title="Ranking"
-    />
   );
 }

@@ -140,7 +140,23 @@ export function QuizDetailPage() {
 
   return (
     <PageContainer
-      actions={<Badge tone={presentation.tone}>{presentation.label}</Badge>}
+      actions={
+        <div className="page-header__action-group">
+          <Badge tone={presentation.tone}>{presentation.label}</Badge>
+          <Link
+            className="button button--secondary"
+            to={`/admin/quizzes/${id}/results`}
+          >
+            Resultados
+          </Link>
+          <Link
+            className="button button--secondary"
+            to={`/admin/quizzes/${id}/ranking`}
+          >
+            Ranking
+          </Link>
+        </div>
+      }
       eyebrow="Administración"
       title="Detalle del cuestionario"
     >

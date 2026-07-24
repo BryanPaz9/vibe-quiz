@@ -127,20 +127,24 @@ function QuestionEditor({
             />
             <div className="quiz-editor-option__actions">
               <Button
+                aria-label="Subir opción"
                 disabled={optionIndex === 0}
                 onClick={() => moveOption(optionIndex, optionIndex - 1)}
+                title="Subir opción"
                 type="button"
                 variant="secondary"
               >
-                Subir opción
+                <span aria-hidden="true">⬆️</span>
               </Button>
               <Button
+                aria-label="Bajar opción"
                 disabled={optionIndex === optionFields.length - 1}
                 onClick={() => moveOption(optionIndex, optionIndex + 1)}
+                title="Bajar opción"
                 type="button"
                 variant="secondary"
               >
-                Bajar opción
+                <span aria-hidden="true">⬇️</span>
               </Button>
               <Button
                 disabled={optionFields.length <= 2}

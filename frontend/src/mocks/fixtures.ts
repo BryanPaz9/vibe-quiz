@@ -1,4 +1,5 @@
 import type {
+  AdminQuizResultsResponse,
   AdminQuizDetail,
   AdminIdentity,
   LoginResponse,
@@ -74,6 +75,37 @@ export const adminQuizDetailFixture: AdminQuizDetail = {
   updatedAt: adminQuizListFixture.data[0].updatedAt,
   publishedAt: null,
   closedAt: null,
+};
+
+export const adminQuizResultsFixture: AdminQuizResultsResponse = {
+  data: [
+    {
+      alias: 'Ada',
+      status: 'COMPLETED',
+      score: 1,
+      totalQuestions: 1,
+      percentage: 100,
+      startedAt: '2026-07-22T12:00:00.000Z',
+      completedAt: '2026-07-22T12:00:42.000Z',
+      durationMs: 42_000,
+    },
+    {
+      alias: 'Grace',
+      status: 'ACTIVE',
+      score: null,
+      totalQuestions: null,
+      percentage: null,
+      startedAt: '2026-07-22T12:05:00.000Z',
+      completedAt: null,
+      durationMs: null,
+    },
+  ],
+  meta: {
+    page: 1,
+    pageSize: 20,
+    total: 2,
+    totalPages: 1,
+  },
 };
 
 export const publicQuizFixture: PublicQuiz = {

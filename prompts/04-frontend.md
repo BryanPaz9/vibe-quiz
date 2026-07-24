@@ -239,7 +239,45 @@ feature implementation.
 - The creation and editing pages share the same validated aggregate form.
 - Playwright covers login, list navigation, detail retrieval and draft update.
 
+## Administrative results and ranking checkpoint 4
+
+### Scope
+
+- Replace `/admin/quizzes/:id/results` and `/admin/quizzes/:id/ranking`
+  placeholders.
+- Consume paginated administrative results and the approved ranking shape with
+  Bearer authentication.
+- Present completed and active participations without calculating authoritative
+  values in the client.
+- Synchronize result pagination with the URL.
+- Support loading, empty, recoverable-error, retry and administrative `401`
+  states.
+- Link detail, results and ranking without exposing additional data.
+- Replace option-order labels with accessible arrow buttons and hover titles.
+
+### Contract and security alignment
+
+- The administrative results response was documented explicitly.
+- The backend now maps only alias, status, score, total, percentage, start,
+  completion and duration.
+- `accessTokenHash`, `normalizedAlias` and persistence-only fields are excluded
+  and protected by an API end-to-end assertion.
+
+### Traceability
+
+- Functional requirements: `FR-019`, `FR-020`, `FR-022`, `FR-024`.
+- User stories: `US-007`, `US-008`, `US-016`.
+- Business rules: `BR-015`, `BR-016`.
+- Acceptance criteria: `AC-012`, `AC-013`, `AC-015`.
+
+### Evidence
+
+- Component tests cover results, active values, pagination, ranking, empty
+  states, retry, Bearer and `401`.
+- Backend API tests prevent exposure of access hashes and normalized aliases.
+- Playwright covers login, detail, administrative results and ranking.
+
 ### Remaining frontend work
 
-- Implement publication, closing and valid draft deletion in the next
-  checkpoint against the approved lifecycle contracts.
+- Implement publication, closing and valid draft deletion against the approved
+  lifecycle contracts before the final browser-validation checkpoint.

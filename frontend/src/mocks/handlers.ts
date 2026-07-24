@@ -3,6 +3,7 @@ import {
   adminFixture,
   adminQuizDetailFixture,
   adminQuizListFixture,
+  adminQuizResultsFixture,
   loginFixture,
   participationFixture,
   participationResultFixture,
@@ -179,6 +180,57 @@ export const handlers = [
           })),
         })),
         updatedAt: '2026-07-23T18:00:00.000Z',
+      });
+    },
+  ),
+  http.get(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}/results`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/results`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json(adminQuizResultsFixture);
+    },
+  ),
+  http.get(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}/ranking`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/ranking`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json({
+        ...rankingFixture,
+        quizPublicId: adminQuizDetailFixture.publicId,
       });
     },
   ),

@@ -157,6 +157,9 @@ marcadores explícitos hasta sus respectivas entregas.
 7. **Detalle y edición — implementados:** consulta del agregado administrativo,
    edición completa para borradores y representación de solo lectura para
    estados no editables.
+8. **Resultados y ranking administrativos — implementados:** resultados
+   paginados, estados activos/completados, ranking autenticado y navegación
+   desde el detalle.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
 `GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
@@ -188,6 +191,13 @@ posiciones recalculadas. La respuesta exitosa actualiza la caché del detalle e
 invalida únicamente los listados. Los estados `PUBLISHED` y `CLOSED` exponen el
 contenido administrativo y `isCorrect` en modo de solo lectura, respetando
 `BR-005`.
+
+Los resultados administrativos usan una respuesta paginada explícita que
+incluye únicamente alias, estado, puntuación, total, porcentaje, fechas y
+duración. El frontend trata como nulos los valores todavía no calculados de una
+participación `ACTIVE`. El backend mapea este DTO sin propagar
+`accessTokenHash`, `normalizedAlias` ni otros campos internos. El ranking
+administrativo reutiliza la forma pública aprobada, pero exige Bearer.
 
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto

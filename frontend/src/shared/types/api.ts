@@ -164,3 +164,21 @@ export interface RankingResponse {
   generatedAt: string;
   entries: RankingEntry[];
 }
+
+export type ParticipationStatus = 'ACTIVE' | 'COMPLETED';
+
+export interface AdminQuizResultItem {
+  alias: string;
+  status: ParticipationStatus;
+  score: number | null;
+  totalQuestions: number | null;
+  percentage: number | null;
+  startedAt: string;
+  completedAt: string | null;
+  durationMs: number | null;
+}
+
+export interface AdminQuizResultsResponse {
+  data: AdminQuizResultItem[];
+  meta: PaginationMeta;
+}

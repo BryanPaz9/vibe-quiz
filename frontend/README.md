@@ -136,5 +136,15 @@ El checkpoint de detalle y edición administrativa está implementado:
 - Presentación administrativa de respuestas correctas y fechas contractuales.
 - Conservación de cambios locales ante errores recuperables.
 
+El checkpoint de resultados y ranking administrativos está implementado:
+
+- Resultados paginados mediante `GET /admin/quizzes/:quizId/results`.
+- Estados `ACTIVE` y `COMPLETED` con valores pendientes explícitos.
+- Ranking Bearer mediante `GET /admin/quizzes/:quizId/ranking`.
+- Navegación entre detalle, resultados y ranking.
+- Estados de carga, vacío, error, reintento y `401`.
+- DTO administrativo limitado a los campos aprobados, sin hashes ni alias
+  normalizados.
+
 Las transiciones de estado y eliminación permanecen como la siguiente entrega
 funcional.

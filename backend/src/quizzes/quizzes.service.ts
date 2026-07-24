@@ -269,11 +269,17 @@ export class QuizzesService {
     ]);
     return {
       data: rows.map((row) => ({
-        ...row,
+        alias: row.alias,
+        status: row.status,
+        score: row.score,
+        totalQuestions: row.totalQuestions,
         percentage:
           row.score !== null && row.totalQuestions
             ? Math.round((row.score / row.totalQuestions) * 100)
             : null,
+        startedAt: row.startedAt,
+        completedAt: row.completedAt,
+        durationMs: row.durationMs,
       })),
       meta: { page, pageSize, total, totalPages: Math.ceil(total / pageSize) },
     };

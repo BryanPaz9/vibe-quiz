@@ -3,6 +3,7 @@ import {
   adminFixture,
   adminQuizDetailFixture,
   adminQuizListFixture,
+  adminQuizResultsFixture,
   loginFixture,
   participationFixture,
   participationResultFixture,
@@ -193,6 +194,58 @@ test('loads and edits an administrative draft', async ({ page }) => {
   await expect(
     page.getByText('Los cambios se guardaron correctamente.'),
   ).toBeVisible();
+});
+
+test('consults administrative results and ranking', async ({ page }) => {
+  await page.route('**/api/v1/auth/login', async (route) => {
+    await route.fulfill({ json: loginFixture });
+  });
+  await page.route('**/api/v1/auth/me', async (route) => {
+    await route.fulfill({ json: adminFixture });
+  });
+  await page.route('**/api/v1/admin/quizzes?**', async (route) => {
+    await route.fulfill({ json: adminQuizListFixture });
+  });
+  await page.route(
+    `**/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+    async (route) => {
+      await route.fulfill({ json: adminQuizDetailFixture });
+    },
+  );
+  await page.route(
+    `**/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/results?**`,
+    async (route) => {
+      expect(route.request().headers()['authorization']).toBe(
+        `Bearer ${loginFixture.accessToken}`,
+      );
+      await route.fulfill({ json: adminQuizResultsFixture });
+    },
+  );
+  await page.route(
+    `**/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/ranking`,
+    async (route) => {
+      expect(route.request().headers()['authorization']).toBe(
+        `Bearer ${loginFixture.accessToken}`,
+      );
+      await route.fulfill({
+        json: {
+          ...rankingFixture,
+          quizPublicId: adminQuizDetailFixture.publicId,
+        },
+      });
+    },
+  );
+  await page.goto('/admin/quizzes');
+
+  await page.getByLabel('Correo electrónico').fill(adminFixture.email);
+  await page.getByLabel('Contraseña').fill('correct-password');
+  await page.getByRole('button', { name: 'Ingresar' }).click();
+  await page.getByRole('link', { name: adminQuizDetailFixture.title }).click();
+  await page.getByRole('link', { name: 'Resultados' }).click();
+
+  await expect(page.getByRole('row', { name: /Ada Completada/ })).toBeVisible();
+  await page.getByRole('link', { name: 'Ver ranking' }).click();
+  await expect(page.getByRole('row', { name: /#1 Ada/ })).toBeVisible();
 });
 
 test('starts, resolves and submits a public quiz', async ({ page }) => {

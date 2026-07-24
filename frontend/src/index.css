@@ -192,6 +192,13 @@ code {
   flex: 0 0 auto;
 }
 
+.page-header__action-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
 .panel,
 .hero-panel {
   border: 1px solid var(--border);

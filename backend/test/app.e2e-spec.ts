@@ -187,6 +187,28 @@ describe('VibeQuiz API', () => {
       .expect(200);
     expect(ranking.body.entries).toHaveLength(1);
     expect(ranking.body.entries[0]).toMatchObject({ alias: 'Ada', score: 1 });
+
+    const administrativeResults = await request(app.getHttpServer())
+      .get(`/api/v1/admin/quizzes/${quizId}/results`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    expect(administrativeResults.body.data).toHaveLength(1);
+    expect(administrativeResults.body.data[0]).toEqual({
+      alias: 'Ada',
+      status: 'COMPLETED',
+      score: 1,
+      totalQuestions: 1,
+      percentage: 100,
+      startedAt: expect.any(String),
+      completedAt: expect.any(String),
+      durationMs: expect.any(Number),
+    });
+    expect(JSON.stringify(administrativeResults.body)).not.toContain(
+      'accessTokenHash',
+    );
+    expect(JSON.stringify(administrativeResults.body)).not.toContain(
+      'normalizedAlias',
+    );
   });
 
   it('rejects blank aliases and invalid pagination', async () => {

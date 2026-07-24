@@ -177,6 +177,12 @@ describe('administrative quiz creation', () => {
 
     await user.click(screen.getByRole('button', { name: 'Agregar opción' }));
     expect(screen.getByLabelText('Opción 3')).toBeInTheDocument();
+    expect(
+      screen.getAllByRole('button', { name: 'Subir opción' })[0],
+    ).toHaveAttribute('title', 'Subir opción');
+    expect(
+      screen.getAllByRole('button', { name: 'Bajar opción' })[0],
+    ).toHaveAttribute('title', 'Bajar opción');
     await user.click(
       screen.getAllByRole('button', { name: 'Eliminar opción' })[2],
     );
