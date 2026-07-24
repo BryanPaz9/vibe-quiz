@@ -126,9 +126,8 @@ El ranking deberá ordenar primero por puntuación descendente. Para
 participantes con la misma puntuación, deberá ordenar por menor tiempo de
 finalización.
 
-Esta regla constituye la funcionalidad prevista para la demostración en
-vivo; antes de esa demostración solo se implementará y documentará el
-ordenamiento base por puntuación.
+La regla se implementa en el backend para los rankings público y
+administrativo sin modificar el contrato de respuesta.
 
 ### FR-022 — Consultar ranking
 

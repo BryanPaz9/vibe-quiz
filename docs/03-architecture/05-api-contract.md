@@ -329,9 +329,9 @@ Response:
 }
 ```
 
-Antes de la demo, `position` refleja puntuación descendente con un orden
-técnico estable. La demo agrega menor duración como segundo criterio sin
-modificar este contrato.
+`position` refleja puntuación descendente, menor duración, finalización
+ascendente e identificador ascendente. El desempate no modifica este
+contrato.
 
 ## Health checks
 

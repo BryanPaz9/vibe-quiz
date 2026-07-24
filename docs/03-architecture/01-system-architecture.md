@@ -73,9 +73,9 @@ No calcula de forma autoritativa puntuación, duración ni posiciones.
 
 ### Ranking
 
-El backend consulta solo participaciones `COMPLETED`, inicialmente
-ordenadas por puntuación descendente. El desempate por duración se
-agregará durante la demo sin cambiar el contrato público.
+El backend consulta solo participaciones `COMPLETED` y las ordena por
+puntuación descendente, menor duración, finalización ascendente e
+identificador ascendente. El contrato público permanece sin cambios.
 
 ## Límites
 
