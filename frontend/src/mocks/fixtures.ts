@@ -174,4 +174,20 @@ export const participationResultFixture: ParticipationResult = {
   percentage: 100,
   durationMs: 42_000,
   completedAt: '2026-07-22T12:00:42.000Z',
+  answers: [
+    {
+      questionId: publicQuizFixture.questions[0].id,
+      questionText: publicQuizFixture.questions[0].text,
+      position: publicQuizFixture.questions[0].position,
+      selectedOption: {
+        id: publicQuizFixture.questions[0].options[0].id,
+        text: publicQuizFixture.questions[0].options[0].text,
+      },
+      correctOption: {
+        id: publicQuizFixture.questions[0].options[0].id,
+        text: publicQuizFixture.questions[0].options[0].text,
+      },
+      isCorrect: true,
+    },
+  ],
 };

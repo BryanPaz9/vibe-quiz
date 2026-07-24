@@ -327,6 +327,7 @@ test('publishes and closes an administrative quiz', async ({ page }) => {
 });
 
 test('starts, resolves and submits a public quiz', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.route(
     `**/api/v1/public/quizzes/${publicQuizFixture.publicId}`,
     async (route) => {
@@ -394,6 +395,10 @@ test('starts, resolves and submits a public quiz', async ({ page }) => {
     ),
   );
   await expect(page.getByText('100%', { exact: true }).first()).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Revisa cómo obtuviste tu nota' }),
+  ).toBeVisible();
+  await expect(page.getByText('Tu respuesta · Correcta')).toBeVisible();
   await page.getByRole('link', { name: 'Ver tabla de clasificación' }).click();
 
   await expect(

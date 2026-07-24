@@ -122,6 +122,8 @@ feature implementation.
 - Verify that the URL participation matches the per-tab session.
 - Render score, total, percentage, duration and completion time from the
   backend.
+- Render the authorized post-completion answer review with selected and correct
+  options, explicit labels and accessible success/error presentation.
 - Mark completed attempts locally and prevent returning to the player.
 - Render the public ranking without authentication or additional personal
   data.
@@ -130,7 +132,8 @@ feature implementation.
 ### Evidence
 
 - Component tests cover authorization, authoritative values, invalid tokens,
-  completion state, ranking entries and empty rankings.
+  completion state, correct and incorrect answer reviews, ranking entries and
+  empty rankings.
 - Duration formatting has deterministic unit tests.
 - Playwright covers the complete public journey through result and ranking.
 

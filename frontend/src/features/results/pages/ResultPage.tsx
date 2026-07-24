@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { AnswerReview } from '@/features/results/components/AnswerReview';
 import {
   clearParticipationSession,
   getParticipationSessionByQuiz,
@@ -141,6 +142,8 @@ export default function ResultPage() {
           </div>
         </dl>
       </section>
+
+      <AnswerReview answers={result.answers} />
 
       <div className="result-actions">
         <Link

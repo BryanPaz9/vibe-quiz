@@ -110,9 +110,10 @@ finalizar.
 
 ### BR-020
 
-El resultado público mostrará aciertos, total, porcentaje y duración. El
-ranking mostrará alias, puntuación y duración, sin revelar respuestas
-correctas, según `OD-005`.
+El resultado autorizado mostrará aciertos, total, porcentaje, duración y el
+detalle de la respuesta seleccionada frente a la correcta. Este detalle solo
+se revelará después de finalizar y con el token de la participación. El ranking
+seguirá mostrando únicamente alias, puntuación y duración, según `OD-005`.
 
 ### BR-021
 

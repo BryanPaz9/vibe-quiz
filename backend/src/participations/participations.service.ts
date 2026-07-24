@@ -202,7 +202,7 @@ export class ParticipationsService {
       return tx.participation.findUniqueOrThrow({ where: { id } });
     });
 
-    return this.publicResult(completed);
+    return this.publicResult(await this.resultDetails(completed.id));
   }
 
   async result(id: string, authorization?: string) {
@@ -214,17 +214,58 @@ export class ParticipationsService {
         HttpStatus.CONFLICT,
       );
     }
-    return this.publicResult(participation);
+    return this.publicResult(await this.resultDetails(participation.id));
   }
 
-  private publicResult(participation: {
-    id: string;
-    alias: string;
-    score: number | null;
-    totalQuestions: number | null;
-    durationMs: number | null;
-    completedAt: Date | null;
-  }) {
+  private resultDetails(id: string) {
+    return this.prisma.participation.findUniqueOrThrow({
+      where: { id },
+      include: {
+        answers: {
+          include: {
+            option: {
+              select: { id: true, text: true },
+            },
+            question: {
+              select: {
+                id: true,
+                text: true,
+                position: true,
+                options: {
+                  where: { isCorrect: true },
+                  select: { id: true, text: true },
+                },
+              },
+            },
+          },
+          orderBy: { question: { position: 'asc' } },
+        },
+      },
+    });
+  }
+
+  private publicResult(
+    participation: Prisma.ParticipationGetPayload<{
+      include: {
+        answers: {
+          include: {
+            option: { select: { id: true; text: true } };
+            question: {
+              select: {
+                id: true;
+                text: true;
+                position: true;
+                options: {
+                  where: { isCorrect: true };
+                  select: { id: true; text: true };
+                };
+              };
+            };
+          };
+        };
+      };
+    }>,
+  ) {
     const score = participation.score ?? 0;
     const totalQuestions = participation.totalQuestions ?? 0;
     return {
@@ -235,6 +276,14 @@ export class ParticipationsService {
       percentage: this.scoring.percentage(score, totalQuestions),
       durationMs: participation.durationMs,
       completedAt: participation.completedAt,
+      answers: participation.answers.map((answer) => ({
+        questionId: answer.question.id,
+        questionText: answer.question.text,
+        position: answer.question.position,
+        selectedOption: answer.option,
+        correctOption: answer.question.options[0],
+        isCorrect: answer.isCorrect,
+      })),
     };
   }
 }

@@ -94,6 +94,9 @@ Los tres checkpoints del flujo público están implementados:
 - Navegación al resultado después de un envío aceptado.
 - Consulta autorizada del resultado mediante el token de participación.
 - Presentación de puntuación, porcentaje y duración del backend.
+- Revisión post-finalización de cada respuesta seleccionada frente a la
+  correcta, protegida por el token de participación.
+- Estados correctos e incorrectos identificados mediante color, icono y texto.
 - Estado de intento completado que impide volver a responder.
 - Ranking público adaptable, incluido su estado vacío.
 

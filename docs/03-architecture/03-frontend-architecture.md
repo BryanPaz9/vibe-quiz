@@ -259,7 +259,12 @@ El resultado utiliza
 `Participation`. La sesión debe coincidir con el `participationId` de la
 URL; un identificador por sí solo no autoriza la consulta. Una respuesta
 exitosa marca localmente el intento como completado y evita regresar al
-jugador.
+jugador. El DTO incluye una revisión ordenada solo después de finalizar:
+pregunta, opción seleccionada, opción correcta e indicador de acierto. La
+interfaz presenta selecciones incorrectas en rojo y respuestas correctas en
+verde, acompañadas siempre por icono y texto para no depender únicamente del
+color. No se conserva ni se deriva la marca correcta desde el snapshot previo
+al envío.
 
 El ranking utiliza `GET /public/quizzes/:publicId/ranking`, no requiere
 token y presenta únicamente alias, puntuación, porcentaje y duración.

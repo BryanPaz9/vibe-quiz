@@ -156,6 +156,21 @@ export interface ParticipationResult {
   percentage: number;
   durationMs: number;
   completedAt: string;
+  answers: ParticipationAnswerReview[];
+}
+
+export interface ParticipationResultOption {
+  id: string;
+  text: string;
+}
+
+export interface ParticipationAnswerReview {
+  questionId: string;
+  questionText: string;
+  position: number;
+  selectedOption: ParticipationResultOption;
+  correctOption: ParticipationResultOption;
+  isCorrect: boolean;
 }
 
 export interface RankingEntry {
