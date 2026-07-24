@@ -118,8 +118,8 @@ export default function LoginPage() {
             Ingresar
           </Button>
           <p className="muted">
-            Por seguridad, la sesión se conserva únicamente mientras esta página
-            permanece abierta.
+            La sesión permanece disponible en esta pestaña hasta que cierres
+            sesión o el acceso expire.
           </p>
         </form>
       </section>

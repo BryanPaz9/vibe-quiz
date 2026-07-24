@@ -65,7 +65,8 @@ src/
 
 - TanStack Query administra estado remoto.
 - React Hook Form y Zod están disponibles para formularios.
-- El JWT administrativo permanece exclusivamente en memoria.
+- El JWT administrativo se conserva por pestaña en `sessionStorage` hasta su
+  vencimiento, un `401` o el cierre manual de sesión.
 - El token opaco de participación se conserva durante el flujo en
   `sessionStorage` y nunca se coloca en la URL.
 - El cliente REST utiliza `Bearer` para administración y `Participation` para
@@ -104,7 +105,7 @@ La autenticación administrativa del cuarto checkpoint está implementada:
 
 - Login validado contra `POST /auth/login`.
 - Verificación de identidad mediante `GET /auth/me`.
-- JWT de vida corta almacenado únicamente en memoria.
+- JWT de vida corta restaurable tras recargar la pestaña actual.
 - Protección y recuperación de rutas administrativas internas.
 - Limpieza de sesión ante expiración, respuesta `401` o cierre manual.
 
@@ -180,6 +181,10 @@ El checkpoint de experiencia visual incorpora:
 - Cronómetro ascendente y responsive durante la participación, restaurado desde
   `startedAt` sin reemplazar la duración autoritativa del backend.
 
-La sesión administrativa continúa exclusivamente en memoria por decisión de
-seguridad. Una recarga requiere autenticarse nuevamente; persistencia o
-renovación necesitarían un contrato de refresh token independiente.
+La sesión administrativa se conserva en `sessionStorage`, limitada a la
+pestaña actual, y se restaura al recargar mientras el `expiresAt` contractual
+siga vigente. El cliente elimina el token al vencer, recibir un `401` o cerrar
+sesión. Esta persistencia no renueva el JWT: al expirar se requiere autenticarse
+de nuevo y una renovación transparente necesitaría un contrato de refresh token
+independiente. Como cualquier almacenamiento accesible desde JavaScript, exige
+mantener las defensas contra XSS y nunca registrar el token.

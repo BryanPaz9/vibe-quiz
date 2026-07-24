@@ -52,7 +52,7 @@ Repair and complete the scaffold originally started by Antigravity:
 - Keep `expiresIn` as the approved numeric contract type. The backend was
   aligned to return the expiration in whole seconds before integration.
 - Never publish real administrator credentials.
-- Keep the administrator JWT in memory.
+- Keep the short-lived administrator JWT in per-tab `sessionStorage`.
 - Keep a participation token only in per-tab `sessionStorage`.
 - Use React Router 7 because the available version 6 retained known
   security vulnerabilities.
@@ -143,7 +143,8 @@ feature implementation.
 
 - Validate the login form without publishing or pre-filling credentials.
 - Authenticate through the approved login endpoint and verify `/auth/me`.
-- Keep the short-lived JWT exclusively in memory.
+- Keep the short-lived JWT in per-tab `sessionStorage` and restore it after a
+  reload only while its contractual expiration remains valid.
 - Restore only protected internal destinations after a successful login.
 - Clear the session after expiration, an administrative `401`, or logout.
 - Display the verified administrator identity in the protected layout.
@@ -151,9 +152,11 @@ feature implementation.
 ### Evidence
 
 - Component tests cover form validation, invalid credentials, identity
-  verification, protected-route restoration, expiration and logout.
+  verification, protected-route restoration, reload restoration, malformed
+  persisted data, expiration and logout.
 - API client tests cover the Bearer scheme and session clearing after `401`.
-- Playwright covers login, access to the administrative shell and logout.
+- Playwright covers login, reload persistence, access to the administrative
+  shell and logout.
 
 ## Administrative quiz list checkpoint 1
 
@@ -331,7 +334,7 @@ feature implementation.
 - Reuse query loaders and mutation-button spinners for pending requests.
 - Add Motion transitions to quiz creation and participation while respecting
   the user's reduced-motion preference.
-- Preserve the approved in-memory-only administrative session model.
+- Preserve the approved short-lived, per-tab administrative session model.
 
 ### Decisions
 

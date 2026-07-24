@@ -39,6 +39,12 @@ test('authenticates and closes the administrative session', async ({
     );
     await route.fulfill({ json: adminFixture });
   });
+  await page.route('**/api/v1/admin/quizzes?**', async (route) => {
+    expect(route.request().headers()['authorization']).toBe(
+      `Bearer ${loginFixture.accessToken}`,
+    );
+    await route.fulfill({ json: adminQuizListFixture });
+  });
   await page.goto('/admin/quizzes');
 
   await expect(
@@ -47,6 +53,13 @@ test('authenticates and closes the administrative session', async ({
   await page.getByLabel('Correo electrónico').fill(adminFixture.email);
   await page.getByLabel('Contraseña').fill('correct-password');
   await page.getByRole('button', { name: 'Ingresar' }).click();
+
+  await expect(
+    page.getByRole('heading', { name: 'Cuestionarios' }),
+  ).toBeVisible();
+  await expect(page.getByText(adminFixture.email)).toBeVisible();
+
+  await page.reload();
 
   await expect(
     page.getByRole('heading', { name: 'Cuestionarios' }),
