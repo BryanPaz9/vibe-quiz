@@ -86,7 +86,9 @@ Relacionados: `FR-010`, `FR-011`, `NFR-012`, `BR-006`, `BR-010`.
 **Entonces** el sistema las registra de forma atómica  
 **Y** calcula la puntuación en el backend  
 **Y** registra finalización y duración  
-**Y** devuelve el resultado permitido.
+**Y** devuelve el resultado permitido con la comparación ordenada de
+respuestas seleccionadas y correctas
+**Y** no permite consultar ese detalle antes de finalizar ni con otro token.
 
 Relacionados: `FR-014` a `FR-018`, `NFR-010` a `NFR-012`,
 `BR-008`, `BR-010`, `BR-012` a `BR-014`.

@@ -88,7 +88,7 @@ describe('VibeQuiz API', () => {
     expect(typeof response.body.expiresIn).toBe('number');
   });
 
-  it('completes the quiz lifecycle without exposing correct answers', async () => {
+  it('reveals answer review only after authorized completion', async () => {
     const created = await request(app.getHttpServer())
       .post('/api/v1/admin/quizzes')
       .set('Authorization', `Bearer ${token}`)
@@ -124,6 +124,15 @@ describe('VibeQuiz API', () => {
       .post(`/api/v1/public/quizzes/${publicId}/participations`)
       .send({ alias: ' Ada ' })
       .expect(201);
+    await request(app.getHttpServer())
+      .get(
+        `/api/v1/participations/${started.body.participationId as string}/result`,
+      )
+      .set(
+        'Authorization',
+        `Participation ${started.body.participationToken as string}`,
+      )
+      .expect(409);
     await request(app.getHttpServer())
       .post(
         `/api/v1/participations/${started.body.participationId as string}/submissions`,
@@ -165,7 +174,43 @@ describe('VibeQuiz API', () => {
       score: 1,
       totalQuestions: 1,
       percentage: 100,
+      answers: [
+        {
+          questionId: question.id,
+          questionText: 'What does AI mean?',
+          position: 1,
+          selectedOption: {
+            id: question.options[0].id,
+            text: 'Artificial Intelligence',
+          },
+          correctOption: {
+            id: question.options[0].id,
+            text: 'Artificial Intelligence',
+          },
+          isCorrect: true,
+        },
+      ],
     });
+    expect(JSON.stringify(result.body)).not.toContain('accessTokenHash');
+    expect(JSON.stringify(result.body)).not.toContain('normalizedAlias');
+
+    await request(app.getHttpServer())
+      .get(
+        `/api/v1/participations/${started.body.participationId as string}/result`,
+      )
+      .set('Authorization', 'Participation invalid')
+      .expect(401);
+
+    const retrievedResult = await request(app.getHttpServer())
+      .get(
+        `/api/v1/participations/${started.body.participationId as string}/result`,
+      )
+      .set(
+        'Authorization',
+        `Participation ${started.body.participationToken as string}`,
+      )
+      .expect(200);
+    expect(retrievedResult.body.answers).toEqual(result.body.answers);
 
     await request(app.getHttpServer())
       .post(

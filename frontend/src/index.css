@@ -690,6 +690,115 @@ code {
   gap: 0.75rem;
 }
 
+.answer-review {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+.answer-review__heading {
+  max-width: 44rem;
+  margin-bottom: 1.25rem;
+}
+
+.answer-review__heading h2 {
+  margin-bottom: 0.65rem;
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
+}
+
+.answer-review__heading > p:last-child {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.answer-review__list {
+  display: grid;
+  gap: 1rem;
+}
+
+.answer-review-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.answer-review-card::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.3rem;
+  content: '';
+}
+
+.answer-review-card--correct::before {
+  background: var(--success);
+}
+
+.answer-review-card--incorrect::before {
+  background: var(--danger);
+}
+
+.answer-review-card__question {
+  margin-bottom: 1.1rem;
+}
+
+.answer-review-card__question > span,
+.answer-option span {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.answer-review-card__question h3 {
+  margin: 0.4rem 0 0;
+  font-family: Outfit, Inter, sans-serif;
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+}
+
+.answer-review-card__comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.answer-option {
+  display: flex;
+  min-width: 0;
+  padding: 1rem;
+  align-items: flex-start;
+  border: 1px solid;
+  border-radius: 0.85rem;
+  gap: 0.75rem;
+}
+
+.answer-option > svg {
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  font-size: 1.15rem;
+}
+
+.answer-option > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.35rem;
+}
+
+.answer-option strong {
+  overflow-wrap: anywhere;
+}
+
+.answer-option--correct {
+  border-color: hsl(151 60% 45% / 0.55);
+  color: hsl(151 75% 78%);
+  background: hsl(151 60% 20% / 0.28);
+}
+
+.answer-option--incorrect {
+  border-color: hsl(4 78% 59% / 0.6);
+  color: hsl(4 90% 82%);
+  background: hsl(4 60% 22% / 0.3);
+}
+
 .ranking-subtitle {
   margin-top: -1rem;
   color: var(--muted);
@@ -1186,6 +1295,10 @@ code {
   }
 
   .result-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .answer-review-card__comparison {
     grid-template-columns: 1fr;
   }
 

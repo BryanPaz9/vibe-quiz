@@ -39,6 +39,12 @@ test('authenticates and closes the administrative session', async ({
     );
     await route.fulfill({ json: adminFixture });
   });
+  await page.route('**/api/v1/admin/quizzes?**', async (route) => {
+    expect(route.request().headers()['authorization']).toBe(
+      `Bearer ${loginFixture.accessToken}`,
+    );
+    await route.fulfill({ json: adminQuizListFixture });
+  });
   await page.goto('/admin/quizzes');
 
   await expect(
@@ -47,6 +53,13 @@ test('authenticates and closes the administrative session', async ({
   await page.getByLabel('Correo electrónico').fill(adminFixture.email);
   await page.getByLabel('Contraseña').fill('correct-password');
   await page.getByRole('button', { name: 'Ingresar' }).click();
+
+  await expect(
+    page.getByRole('heading', { name: 'Cuestionarios' }),
+  ).toBeVisible();
+  await expect(page.getByText(adminFixture.email)).toBeVisible();
+
+  await page.reload();
 
   await expect(
     page.getByRole('heading', { name: 'Cuestionarios' }),
@@ -327,6 +340,7 @@ test('publishes and closes an administrative quiz', async ({ page }) => {
 });
 
 test('starts, resolves and submits a public quiz', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.route(
     `**/api/v1/public/quizzes/${publicQuizFixture.publicId}`,
     async (route) => {
@@ -394,6 +408,10 @@ test('starts, resolves and submits a public quiz', async ({ page }) => {
     ),
   );
   await expect(page.getByText('100%', { exact: true }).first()).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Revisa cómo obtuviste tu nota' }),
+  ).toBeVisible();
+  await expect(page.getByText('Tu respuesta · Correcta')).toBeVisible();
   await page.getByRole('link', { name: 'Ver tabla de clasificación' }).click();
 
   await expect(

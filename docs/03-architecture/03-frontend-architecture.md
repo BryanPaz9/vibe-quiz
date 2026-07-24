@@ -70,8 +70,8 @@ feature/
 - Estado remoto: biblioteca de consultas con caché y mutaciones.
 - Formularios: biblioteca de formularios más esquemas de validación.
 - Estado local: React para interacción efímera.
-- Sesión administrativa: token en memoria; no almacenar secretos en
-  código ni registrar el token.
+- Sesión administrativa: token de vida corta en `sessionStorage`, limitado a
+  la pestaña; no almacenar secretos en código ni registrar el token.
 
 La selección exacta de bibliotecas se fijará al iniciar frontend sin
 alterar el contrato ni las responsabilidades descritas.
@@ -168,11 +168,13 @@ marcadores explícitos hasta sus respectivas entregas.
     transiciones accesibles en creación y participación.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
-`GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
-exclusivamente en memoria; una recarga, un cierre de sesión, el vencimiento
-local o cualquier `401` administrativo eliminan la sesión. Después del login se
-recupera únicamente una ruta interna bajo `/admin/`, evitando redirecciones
-externas.
+`GET /auth/me` antes de habilitar el panel. El JWT, la identidad verificada y su
+vencimiento se conservan en `sessionStorage` para restaurar la sesión al
+recargar la misma pestaña. El cierre manual, el vencimiento local, datos
+persistidos inválidos o cualquier `401` administrativo eliminan la sesión.
+Esta persistencia no extiende la vigencia ni implementa refresh token. Después
+del login se recupera únicamente una ruta interna bajo `/admin/`, evitando
+redirecciones externas.
 
 El listado administrativo utiliza `GET /admin/quizzes` mediante el cliente
 compartido con `{ kind: 'admin' }`. TanStack Query mantiene el estado remoto y
@@ -259,7 +261,12 @@ El resultado utiliza
 `Participation`. La sesión debe coincidir con el `participationId` de la
 URL; un identificador por sí solo no autoriza la consulta. Una respuesta
 exitosa marca localmente el intento como completado y evita regresar al
-jugador.
+jugador. El DTO incluye una revisión ordenada solo después de finalizar:
+pregunta, opción seleccionada, opción correcta e indicador de acierto. La
+interfaz presenta selecciones incorrectas en rojo y respuestas correctas en
+verde, acompañadas siempre por icono y texto para no depender únicamente del
+color. No se conserva ni se deriva la marca correcta desde el snapshot previo
+al envío.
 
 El ranking utiliza `GET /public/quizzes/:publicId/ranking`, no requiere
 token y presenta únicamente alias, puntuación, porcentaje y duración.

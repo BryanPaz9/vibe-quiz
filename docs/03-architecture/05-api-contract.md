@@ -273,16 +273,38 @@ Response `201`:
   "totalQuestions": 1,
   "percentage": 100,
   "durationMs": 42000,
-  "completedAt": "2026-07-22T12:00:42.000Z"
+  "completedAt": "2026-07-22T12:00:42.000Z",
+  "answers": [
+    {
+      "questionId": "uuid",
+      "questionText": "¿Qué significa IA?",
+      "position": 1,
+      "selectedOption": {
+        "id": "uuid",
+        "text": "Inteligencia Artificial"
+      },
+      "correctOption": {
+        "id": "uuid",
+        "text": "Inteligencia Artificial"
+      },
+      "isCorrect": true
+    }
+  ]
 }
 ```
+
+`answers` se ordena por la posición de la pregunta y se revela únicamente
+después de completar la participación. No incluye marcas de otras opciones,
+tokens, hashes ni datos de otros participantes.
 
 Errores: `400 INCOMPLETE_SUBMISSION`, `400 INVALID_ANSWER`,
 `401 INVALID_PARTICIPATION_TOKEN`, `409 PARTICIPATION_COMPLETED`.
 
 ### GET `/participations/:participationId/result`
 
-Devuelve el mismo resultado público. No incluye respuestas correctas.
+Devuelve el mismo resultado autorizado con el detalle post-finalización.
+Antes de completar responde `409 QUIZ_NOT_AVAILABLE`; un token ausente o
+incorrecto responde `401 INVALID_PARTICIPATION_TOKEN`.
 
 ## Ranking público
 

@@ -4,8 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { appRoutes } from '@/app/router';
 import {
+  clearAdminSession,
   getAdminSession,
-  setAdminSession,
+  restoreAdminSession,
 } from '@/features/auth/session/admin-session';
 import { adminFixture, loginFixture } from '@/mocks/fixtures';
 
@@ -39,14 +40,41 @@ async function fillCredentials(
 }
 
 describe('administrative authentication', () => {
-  it('discards an expired in-memory session', () => {
-    setAdminSession({
-      accessToken: 'expired-token',
-      admin: adminFixture,
-      expiresAt: Date.now() - 1,
-    });
+  it('discards an expired persisted session', () => {
+    sessionStorage.setItem(
+      'vibequiz:admin-session',
+      JSON.stringify({
+        accessToken: 'expired-token',
+        admin: adminFixture,
+        expiresAt: Date.now() - 1,
+      }),
+    );
 
-    expect(getAdminSession()).toBeNull();
+    expect(restoreAdminSession()).toBeNull();
+    expect(sessionStorage.getItem('vibequiz:admin-session')).toBeNull();
+  });
+
+  it('restores a valid session from the current tab', () => {
+    const session = {
+      accessToken: 'persisted-token',
+      admin: adminFixture,
+      expiresAt: Date.now() + 60_000,
+    };
+    sessionStorage.setItem('vibequiz:admin-session', JSON.stringify(session));
+
+    expect(restoreAdminSession()).toEqual(session);
+    expect(getAdminSession()).toEqual(session);
+    clearAdminSession();
+  });
+
+  it('rejects malformed persisted session data', () => {
+    sessionStorage.setItem(
+      'vibequiz:admin-session',
+      JSON.stringify({ accessToken: 'untrusted-token' }),
+    );
+
+    expect(restoreAdminSession()).toBeNull();
+    expect(sessionStorage.getItem('vibequiz:admin-session')).toBeNull();
   });
 
   it('validates credentials before contacting the API', async () => {
@@ -90,9 +118,15 @@ describe('administrative authentication', () => {
       accessToken: loginFixture.accessToken,
       admin: adminFixture,
     });
+    expect(
+      JSON.parse(sessionStorage.getItem('vibequiz:admin-session') ?? '{}'),
+    ).toMatchObject({
+      accessToken: loginFixture.accessToken,
+      admin: adminFixture,
+    });
   });
 
-  it('clears the in-memory session when the administrator logs out', async () => {
+  it('clears the administrative session when the administrator logs out', async () => {
     const router = renderRoute('/admin/quizzes');
     await fillCredentials();
     const user = userEvent.setup();
@@ -105,5 +139,6 @@ describe('administrative authentication', () => {
       expect(router.state.location.pathname).toBe('/admin/login'),
     );
     expect(getAdminSession()).toBeNull();
+    expect(sessionStorage.getItem('vibequiz:admin-session')).toBeNull();
   });
 });

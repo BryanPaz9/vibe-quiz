@@ -61,9 +61,13 @@ la demostración y no como verificación real de identidad.
 
 **Pregunta:** ¿Qué ve el participante al terminar?
 
-**Recomendación:** mostrar aciertos, total, porcentaje, duración y
-ranking público con alias, puntuación y duración. No revelar respuestas
-correctas en el MVP.
+**Decisión actualizada:** mostrar aciertos, total, porcentaje, duración y la
+comparación de respuestas seleccionadas contra las correctas únicamente
+después de finalizar y con el token opaco de la participación. El ranking
+público conserva solo alias, puntuación y duración.
+
+**Actualización aprobada:** el desarrollador autorizó revelar el detalle
+post-finalización en el checkpoint de revisión de respuestas.
 
 **Impacta:** `FR-018`, `FR-022`, `NFR-007`, `NFR-021`, `BR-020`.
 

@@ -102,9 +102,11 @@ finalización y la duración calculada por el servidor.
 ### FR-018 — Mostrar resultado
 
 El sistema deberá mostrar al participante la información de resultado
-aprobada después de finalizar.
+aprobada después de finalizar, incluida la comparación entre cada respuesta
+seleccionada y la opción correcta.
 
-El resultado visible seguirá la información aprobada en `OD-005`.
+El detalle solo estará disponible con la autorización de la participación y
+seguirá la información aprobada en `OD-005`.
 
 ### FR-019 — Consultar resultados administrativos
 

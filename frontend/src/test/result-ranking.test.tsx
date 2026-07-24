@@ -9,6 +9,7 @@ import {
 } from '@/features/participation/session/participation-session';
 import {
   participationFixture,
+  participationResultFixture,
   publicQuizFixture,
   rankingFixture,
 } from '@/mocks/fixtures';
@@ -70,11 +71,63 @@ describe('public result', () => {
     expect(screen.getByText('1 de 1')).toBeInTheDocument();
     expect(screen.getByText('42 s')).toBeInTheDocument();
     expect(
+      screen.getByRole('heading', {
+        name: 'Revisa cómo obtuviste tu nota',
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Tu respuesta · Correcta')).toBeInTheDocument();
+    expect(
+      screen
+        .getByText('Inteligencia Artificial')
+        .closest('.answer-option--correct'),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole('link', { name: 'Ver tabla de clasificación' }),
     ).toHaveAttribute('href', `/quiz/${publicQuizFixture.publicId}/ranking`);
     expect(
       getParticipationSessionByQuiz(publicQuizFixture.publicId)?.status,
     ).toBe('COMPLETED');
+  });
+
+  it('contrasts an incorrect selection with the correct answer', async () => {
+    storeCompletedParticipation();
+    server.use(
+      http.get(
+        `http://localhost:3000/api/v1/participations/${participationFixture.participationId}/result`,
+        () =>
+          HttpResponse.json({
+            ...participationResultFixture,
+            score: 0,
+            percentage: 0,
+            answers: [
+              {
+                ...participationResultFixture.answers[0],
+                selectedOption: {
+                  id: publicQuizFixture.questions[0].options[1].id,
+                  text: publicQuizFixture.questions[0].options[1].text,
+                },
+                isCorrect: false,
+              },
+            ],
+          }),
+      ),
+    );
+    renderRoute(
+      `/quiz/${publicQuizFixture.publicId}/result/${participationFixture.participationId}`,
+    );
+
+    expect(
+      await screen.findByText('Tu respuesta · Incorrecta'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Respuesta correcta')).toBeInTheDocument();
+    expect(
+      screen.getByText('Interfaz Abierta').closest('.answer-option--incorrect'),
+    ).toBeInTheDocument();
+    expect(
+      screen
+        .getByText('Inteligencia Artificial')
+        .closest('.answer-option--correct'),
+    ).toBeInTheDocument();
   });
 
   it('clears a session rejected by the backend', async () => {

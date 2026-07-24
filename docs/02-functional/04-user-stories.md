@@ -98,7 +98,7 @@ Relacionada con: `FR-014`, `FR-015`, `FR-016`, `FR-017`.
 ### US-014 — Consultar mi resultado
 
 Como participante, quiero ver el resultado permitido al finalizar para
-conocer mi desempeño.
+conocer mi desempeño y comparar mis respuestas con las correctas.
 
 Relacionada con: `FR-018`.
 

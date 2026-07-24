@@ -57,7 +57,7 @@ describe('API client', () => {
     });
   });
 
-  it('clears the in-memory admin session after a 401', async () => {
+  it('clears the administrative session after a 401', async () => {
     setAdminSession({
       accessToken: 'expired-token',
       admin: { id: 'admin-id', email: 'admin@example.com' },
@@ -85,5 +85,6 @@ describe('API client', () => {
       apiRequest('/auth/me', { authentication: { kind: 'admin' } }),
     ).rejects.toMatchObject({ code: 'UNAUTHORIZED', status: 401 });
     expect(getAdminSession()).toBeNull();
+    expect(sessionStorage.getItem('vibequiz:admin-session')).toBeNull();
   });
 });
