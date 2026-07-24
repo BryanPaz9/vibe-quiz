@@ -16,9 +16,10 @@ Workflow: 1. Analyze impact. 2. Present plan. 3. Wait approval. 4.
 Implement. 5. Update tests. 6. Update documentation. 7. Summarize
 changes.
 
-Suggested feature: Leaderboard ordered by score and completion time.
+The leaderboard tie-break is part of the completed baseline: score descending,
+shorter duration, earlier completion and stable identifier.
 
-For a controlled live demonstration, the base leaderboard should already
-exist. The live change will add the tie-break rule: when two participants
-have the same score, the participant with the shorter completion time is
-ranked first.
+The live feature remains an open human decision. Prefer a small, reversible and
+visually evident change that can be compared before and after without depending
+on completed participations. Document the selected scope and acceptance
+evidence here before the presentation.

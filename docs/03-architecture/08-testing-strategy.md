@@ -15,8 +15,8 @@ contratos.
 - Validación del agregado antes de publicar.
 - Cálculo de puntuación y porcentaje.
 - Duración.
-- Ordenamiento base del ranking.
-- Desempate agregado durante la demo.
+- Ordenamiento del ranking por puntuación.
+- Desempate por duración y criterios técnicos estables.
 - Mapeo de DTO público sin `isCorrect`.
 
 ### Integración

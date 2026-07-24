@@ -149,7 +149,8 @@ Firefox según `NFR-019`.
 El alcance puede exceder el tiempo disponible antes de la presentación.
 
 **Mitigación:** entregar un flujo vertical completo antes de añadir
-operaciones secundarias y reservar la regla de desempate para la demo.
+operaciones secundarias y mantener la funcionalidad de la demo pequeña,
+reversible y visible.
 
 ### R-002 — Contrato inestable
 

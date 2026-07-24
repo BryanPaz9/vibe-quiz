@@ -131,11 +131,11 @@ Relacionados: `FR-019`.
 
 Relacionados: `FR-020`, `FR-022`, `BR-015`, `BR-016`.
 
-## AC-014 — Desempate de demostración
+## AC-014 — Desempate por duración
 
 **Dado** dos participaciones finalizadas con la misma puntuación y
 duraciones diferentes  
-**Cuando** se aplica la funcionalidad de desempate durante la demo  
+**Cuando** se consulta el ranking\
 **Entonces** aparece primero la participación con menor duración.
 
 Relacionados: `FR-021`, `BR-017`.

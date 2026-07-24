@@ -91,9 +91,9 @@ El ranking base se ordenará por puntuación descendente.
 
 ### BR-017
 
-Durante la demostración en vivo se agregará el desempate por menor
-duración. Antes de implementarlo deberá existir una prueba que demuestre
-el empate bajo el ordenamiento base.
+Las participaciones con la misma puntuación se ordenarán por menor
+duración. La implementación deberá estar precedida por una prueba que
+demuestre el empate bajo el ordenamiento base.
 
 ### BR-018
 
