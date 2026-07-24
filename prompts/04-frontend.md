@@ -181,7 +181,135 @@ feature implementation.
   states, retry, URL filters, pagination, navigation and administrative `401`.
 - Playwright covers login followed by the authenticated administrative list.
 
+## Administrative quiz creation checkpoint 2
+
+### Scope
+
+- Replace the `/admin/quizzes/new` placeholder.
+- Build the complete aggregate with title, optional description, questions,
+  options, explicit order and exactly one correct answer per question.
+- Apply the approved length and minimum-count validation rules.
+- Support accessible add, remove, move-up and move-down controls.
+- Submit only the approved `QuizContentInput` fields through
+  `POST /admin/quizzes` with Bearer authentication.
+- Preserve the form after recoverable errors and navigate to the returned
+  administrative detail identifier after success.
+
+### Traceability
+
+- Functional requirements: `FR-002`, `FR-006`, `FR-007`.
+- User story: `US-002`.
+- Business rules: `BR-001`, `BR-002`, `BR-003`, `BR-004`.
+- Acceptance criteria: `AC-002`, `AC-003`.
+
+### Evidence
+
+- Component tests cover client validation, dynamic aggregate management,
+  explicit positions, correct-answer selection, Bearer authorization, retry
+  and administrative `401`.
+- MSW implements the approved creation shape without additional fields.
+- Playwright covers login, list navigation, aggregate creation and navigation
+  to the returned detail route.
+
+## Administrative quiz detail and editing checkpoint 3
+
+### Scope
+
+- Replace the `/admin/quizzes/:id` placeholder.
+- Retrieve the approved administrative aggregate through
+  `GET /admin/quizzes/:quizId` with Bearer authentication.
+- Pre-fill and reuse the aggregate editor only when status is `DRAFT`.
+- Replace a valid draft through `PUT /admin/quizzes/:quizId`.
+- Render `PUBLISHED` and `CLOSED` content, dates and correct answers in
+  read-only mode.
+- Preserve local edits after recoverable update errors and reuse global
+  administrative `401` handling.
+
+### Traceability
+
+- Functional requirements: `FR-003`, `FR-004`, `FR-006`, `FR-007`.
+- User stories: `US-003`, `US-004`.
+- Business rules: `BR-002`, `BR-003`, `BR-004`, `BR-005`.
+- Acceptance criteria: `AC-003`, `AC-004`.
+
+### Evidence
+
+- Component tests cover Bearer detail retrieval, draft pre-fill, full
+  replacement, read-only states, retry, update conflicts and `401`.
+- The creation and editing pages share the same validated aggregate form.
+- Playwright covers login, list navigation, detail retrieval and draft update.
+
+## Administrative results and ranking checkpoint 4
+
+### Scope
+
+- Replace `/admin/quizzes/:id/results` and `/admin/quizzes/:id/ranking`
+  placeholders.
+- Consume paginated administrative results and the approved ranking shape with
+  Bearer authentication.
+- Present completed and active participations without calculating authoritative
+  values in the client.
+- Synchronize result pagination with the URL.
+- Support loading, empty, recoverable-error, retry and administrative `401`
+  states.
+- Link detail, results and ranking without exposing additional data.
+- Replace option-order labels with accessible arrow buttons and hover titles.
+
+### Contract and security alignment
+
+- The administrative results response was documented explicitly.
+- The backend now maps only alias, status, score, total, percentage, start,
+  completion and duration.
+- `accessTokenHash`, `normalizedAlias` and persistence-only fields are excluded
+  and protected by an API end-to-end assertion.
+
+### Traceability
+
+- Functional requirements: `FR-019`, `FR-020`, `FR-022`, `FR-024`.
+- User stories: `US-007`, `US-008`, `US-016`.
+- Business rules: `BR-015`, `BR-016`.
+- Acceptance criteria: `AC-012`, `AC-013`, `AC-015`.
+
+### Evidence
+
+- Component tests cover results, active values, pagination, ranking, empty
+  states, retry, Bearer and `401`.
+- Backend API tests prevent exposure of access hashes and normalized aliases.
+- Playwright covers login, detail, administrative results and ranking.
+
+## Administrative quiz lifecycle checkpoint 5
+
+### Scope
+
+- Publish a `DRAFT` quiz through the approved Bearer endpoint after explicit
+  confirmation.
+- Display, open and copy the public participation URL after publication.
+- Close a `PUBLISHED` quiz after explicit confirmation and refresh its
+  authoritative state.
+- Permanently delete only an eligible `DRAFT` quiz after destructive
+  confirmation.
+- Expose controls only for valid transitions, prevent repeated submissions and
+  preserve the detail after recoverable conflicts.
+- Reuse global administrative `401` handling.
+
+### Traceability
+
+- Functional requirements: `FR-005`, `FR-008`.
+- User stories: `US-005`, `US-006`.
+- Business rules: `BR-001`, `BR-005`.
+- Open decisions resolved by the approved contract: `OD-003`, `OD-007`.
+- Acceptance criteria: `AC-005`, `AC-006`, `AC-007`.
+
+### Evidence
+
+- Component tests cover publication, public URL copy, closing, eligible
+  deletion, rejected deletion, Bearer authorization and administrative `401`.
+- MSW fixtures reproduce the exact approved publication response and lifecycle
+  endpoints.
+- Playwright covers login followed by publication, public-link exposure and
+  closing.
+
 ### Remaining frontend work
 
-- Implement creation and administrative detail in later checkpoints against
-  the approved `/admin/quizzes` contracts.
+- Run the final integrated browser-validation checkpoint against the real
+  backend and its supported database.

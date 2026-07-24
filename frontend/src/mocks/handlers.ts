@@ -1,15 +1,19 @@
 import { http, HttpResponse } from 'msw';
 import {
   adminFixture,
+  adminQuizDetailFixture,
   adminQuizListFixture,
+  adminQuizResultsFixture,
   loginFixture,
   participationFixture,
   participationResultFixture,
+  publishQuizFixture,
   publicQuizFixture,
   rankingFixture,
 } from './fixtures';
 import type {
   LoginRequest,
+  QuizContentInput,
   StartParticipationRequest,
 } from '@/shared/types/api';
 
@@ -81,6 +85,233 @@ export const handlers = [
     }
     return HttpResponse.json(adminQuizListFixture);
   }),
+  http.post(`${baseUrl}/admin/quizzes`, async ({ request }) => {
+    if (
+      request.headers.get('Authorization') !==
+      `Bearer ${loginFixture.accessToken}`
+    ) {
+      return HttpResponse.json(
+        {
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Unauthorized',
+            details: [],
+            requestId: 'request-id',
+            timestamp: '2026-07-23T12:00:00.000Z',
+            path: '/api/v1/admin/quizzes',
+          },
+        },
+        { status: 401 },
+      );
+    }
+    const body = (await request.json()) as QuizContentInput;
+    return HttpResponse.json(
+      {
+        ...adminQuizDetailFixture,
+        title: body.title,
+        description: body.description ?? null,
+        questions: body.questions.map((question, questionIndex) => ({
+          ...question,
+          id: `question-${questionIndex + 1}`,
+          options: question.options.map((option, optionIndex) => ({
+            ...option,
+            id: `option-${questionIndex + 1}-${optionIndex + 1}`,
+          })),
+        })),
+      },
+      { status: 201 },
+    );
+  }),
+  http.get(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json(adminQuizDetailFixture);
+    },
+  ),
+  http.put(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}`,
+    async ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      const body = (await request.json()) as QuizContentInput;
+      return HttpResponse.json({
+        ...adminQuizDetailFixture,
+        title: body.title,
+        description: body.description ?? null,
+        questions: body.questions.map((question, questionIndex) => ({
+          ...question,
+          id: `updated-question-${questionIndex + 1}`,
+          options: question.options.map((option, optionIndex) => ({
+            ...option,
+            id: `updated-option-${questionIndex + 1}-${optionIndex + 1}`,
+          })),
+        })),
+        updatedAt: '2026-07-23T18:00:00.000Z',
+      });
+    },
+  ),
+  http.post(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}/publish`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/publish`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json(publishQuizFixture);
+    },
+  ),
+  http.post(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}/close`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/close`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json({
+        ...adminQuizDetailFixture,
+        status: 'CLOSED',
+        publishedAt: publishQuizFixture.publishedAt,
+        closedAt: '2026-07-23T16:00:00.000Z',
+      });
+    },
+  ),
+  http.delete(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return new HttpResponse(null, { status: 204 });
+    },
+  ),
+  http.get(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}/results`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/results`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json(adminQuizResultsFixture);
+    },
+  ),
+  http.get(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}/ranking`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/ranking`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json({
+        ...rankingFixture,
+        quizPublicId: adminQuizDetailFixture.publicId,
+      });
+    },
+  ),
   http.get(`${baseUrl}/public/quizzes/${publicQuizFixture.publicId}`, () =>
     HttpResponse.json(publicQuizFixture),
   ),

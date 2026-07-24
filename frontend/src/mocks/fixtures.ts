@@ -1,6 +1,9 @@
 import type {
+  AdminQuizResultsResponse,
+  AdminQuizDetail,
   AdminIdentity,
   LoginResponse,
+  PublishQuizResponse,
   QuizListResponse,
   PublicQuiz,
   ParticipationResult,
@@ -38,6 +41,78 @@ export const adminQuizListFixture: QuizListResponse = {
     page: 1,
     pageSize: 20,
     total: 1,
+    totalPages: 1,
+  },
+};
+
+export const adminQuizDetailFixture: AdminQuizDetail = {
+  id: adminQuizListFixture.data[0].id,
+  publicId: adminQuizListFixture.data[0].publicId,
+  title: adminQuizListFixture.data[0].title,
+  description: adminQuizListFixture.data[0].description,
+  status: 'DRAFT',
+  questions: [
+    {
+      id: '88888888-8888-4888-8888-888888888888',
+      text: '¿Qué significa IA?',
+      position: 1,
+      options: [
+        {
+          id: '99999999-9999-4999-8999-999999999999',
+          text: 'Inteligencia Artificial',
+          position: 1,
+          isCorrect: true,
+        },
+        {
+          id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+          text: 'Interfaz Abierta',
+          position: 2,
+          isCorrect: false,
+        },
+      ],
+    },
+  ],
+  createdAt: adminQuizListFixture.data[0].createdAt,
+  updatedAt: adminQuizListFixture.data[0].updatedAt,
+  publishedAt: null,
+  closedAt: null,
+};
+
+export const publishQuizFixture: PublishQuizResponse = {
+  id: adminQuizDetailFixture.id,
+  publicId: adminQuizDetailFixture.publicId,
+  status: 'PUBLISHED',
+  publishedAt: '2026-07-23T15:00:00.000Z',
+  publicUrlPath: `/quiz/${adminQuizDetailFixture.publicId}`,
+};
+
+export const adminQuizResultsFixture: AdminQuizResultsResponse = {
+  data: [
+    {
+      alias: 'Ada',
+      status: 'COMPLETED',
+      score: 1,
+      totalQuestions: 1,
+      percentage: 100,
+      startedAt: '2026-07-22T12:00:00.000Z',
+      completedAt: '2026-07-22T12:00:42.000Z',
+      durationMs: 42_000,
+    },
+    {
+      alias: 'Grace',
+      status: 'ACTIVE',
+      score: null,
+      totalQuestions: null,
+      percentage: null,
+      startedAt: '2026-07-22T12:05:00.000Z',
+      completedAt: null,
+      durationMs: null,
+    },
+  ],
+  meta: {
+    page: 1,
+    pageSize: 20,
+    total: 2,
     totalPages: 1,
   },
 };

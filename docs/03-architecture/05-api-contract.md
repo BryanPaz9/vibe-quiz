@@ -148,8 +148,34 @@ Cambia `PUBLISHED` a `CLOSED`. No se reabre en el MVP.
 
 Query: `page`, `pageSize`.
 
-Devuelve alias, puntuación, total, porcentaje, estado, inicio,
-finalización y duración.
+Response:
+
+```json
+{
+  "data": [
+    {
+      "alias": "Ada",
+      "status": "COMPLETED",
+      "score": 8,
+      "totalQuestions": 10,
+      "percentage": 80,
+      "startedAt": "2026-07-22T12:00:00.000Z",
+      "completedAt": "2026-07-22T12:00:42.000Z",
+      "durationMs": 42000
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "pageSize": 20,
+    "total": 1,
+    "totalPages": 1
+  }
+}
+```
+
+Para participaciones `ACTIVE`, `score`, `totalQuestions`, `percentage`,
+`completedAt` y `durationMs` son `null`. La respuesta no incluye
+`normalizedAlias`, hashes de acceso ni otros campos internos.
 
 ### GET `/admin/quizzes/:quizId/ranking`
 

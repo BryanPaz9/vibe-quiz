@@ -98,6 +98,14 @@ export interface AdminQuizDetail {
   closedAt: string | null;
 }
 
+export interface PublishQuizResponse {
+  id: string;
+  publicId: string;
+  status: 'PUBLISHED';
+  publishedAt: string;
+  publicUrlPath: string;
+}
+
 export interface PublicQuizOption {
   id: string;
   text: string;
@@ -163,4 +171,22 @@ export interface RankingResponse {
   quizPublicId: string;
   generatedAt: string;
   entries: RankingEntry[];
+}
+
+export type ParticipationStatus = 'ACTIVE' | 'COMPLETED';
+
+export interface AdminQuizResultItem {
+  alias: string;
+  status: ParticipationStatus;
+  score: number | null;
+  totalQuestions: number | null;
+  percentage: number | null;
+  startedAt: string;
+  completedAt: string | null;
+  durationMs: number | null;
+}
+
+export interface AdminQuizResultsResponse {
+  data: AdminQuizResultItem[];
+  meta: PaginationMeta;
 }

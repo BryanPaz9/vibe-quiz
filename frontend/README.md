@@ -117,5 +117,46 @@ implementado y conserva trazabilidad con `FR-003`, `US-003`, `AC-001`,
 - Navegación hacia los placeholders aprobados de creación y detalle.
 - Limpieza global de la sesión y regreso al login ante `401`.
 
-La creación y el detalle administrativo permanecen como las siguientes
-entregas funcionales.
+El checkpoint de creación administrativa está implementado:
+
+- Formulario dinámico para el agregado completo del cuestionario.
+- Gestión y orden explícito de preguntas y opciones.
+- Una única respuesta correcta por pregunta.
+- Validación de los límites aprobados antes de enviar.
+- Creación Bearer mediante `POST /admin/quizzes`.
+- Conservación del formulario ante errores recuperables.
+- Navegación al detalle creado usando el identificador del backend.
+
+El checkpoint de detalle y edición administrativa está implementado:
+
+- Consulta Bearer mediante `GET /admin/quizzes/:quizId`.
+- Precarga del agregado y reutilización del editor completo para borradores.
+- Reemplazo transaccional mediante `PUT /admin/quizzes/:quizId`.
+- Vista de solo lectura para cuestionarios `PUBLISHED` y `CLOSED`.
+- Presentación administrativa de respuestas correctas y fechas contractuales.
+- Conservación de cambios locales ante errores recuperables.
+
+El checkpoint de resultados y ranking administrativos está implementado:
+
+- Resultados paginados mediante `GET /admin/quizzes/:quizId/results`.
+- Estados `ACTIVE` y `COMPLETED` con valores pendientes explícitos.
+- Ranking Bearer mediante `GET /admin/quizzes/:quizId/ranking`.
+- Navegación entre detalle, resultados y ranking.
+- Estados de carga, vacío, error, reintento y `401`.
+- DTO administrativo limitado a los campos aprobados, sin hashes ni alias
+  normalizados.
+
+El checkpoint de ciclo de vida administrativo está implementado:
+
+- Publicación confirmada de borradores mediante
+  `POST /admin/quizzes/:quizId/publish`.
+- Presentación, apertura y copia del enlace público devuelto por el contrato.
+- Cierre confirmado de cuestionarios publicados mediante
+  `POST /admin/quizzes/:quizId/close`.
+- Eliminación permanente y confirmada de borradores elegibles.
+- Controles disponibles únicamente para las transiciones válidas de cada
+  estado.
+- Bloqueo de doble envío, errores recuperables y limpieza global ante `401`.
+
+Permanece la validación funcional final del sistema en navegadores contra el
+backend integrado.

@@ -151,6 +151,18 @@ marcadores explícitos hasta sus respectivas entregas.
 5. **Listado administrativo — implementado:** consulta Bearer, paginación,
    búsqueda y filtro por estado sincronizados con la URL, estados de consulta y
    navegación a creación y detalle.
+6. **Creación administrativa — implementada:** formulario dinámico del
+   agregado, validación contractual, posiciones explícitas, selección de la
+   respuesta correcta y creación autenticada.
+7. **Detalle y edición — implementados:** consulta del agregado administrativo,
+   edición completa para borradores y representación de solo lectura para
+   estados no editables.
+8. **Resultados y ranking administrativos — implementados:** resultados
+   paginados, estados activos/completados, ranking autenticado y navegación
+   desde el detalle.
+9. **Ciclo de vida administrativo — implementado:** publicación de borradores,
+   enlace público copiable, cierre de cuestionarios publicados y eliminación
+   confirmada de borradores elegibles.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
 `GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
@@ -166,6 +178,39 @@ Router conserva esos parámetros en la URL. La página vuelve a `1` al aplicar
 una búsqueda o cambiar el estado, mientras que los controles de navegación se
 derivan exclusivamente de `meta` en la respuesta. Un `401` reutiliza la
 limpieza global de sesión y la ruta protegida devuelve al login.
+
+La creación utiliza React Hook Form con arreglos anidados para preguntas y
+opciones, y Zod replica los límites aprobados del contrato y del modelo de
+datos. El orden visual se transforma en posiciones correlativas al construir
+el payload; no se envían identificadores, estados ni valores calculados fuera
+de `QuizContentInput`. Tras `POST /admin/quizzes`, el identificador de la
+respuesta dirige a `/admin/quizzes/:id`. Los errores recuperables conservan el
+contenido y un `401` reutiliza el mecanismo global de sesión.
+
+El detalle consulta `GET /admin/quizzes/:quizId` con una clave propia de
+TanStack Query. Los cuestionarios `DRAFT` reutilizan el mismo editor de la
+creación y `PUT /admin/quizzes/:quizId` reemplaza el agregado completo con
+posiciones recalculadas. La respuesta exitosa actualiza la caché del detalle e
+invalida únicamente los listados. Los estados `PUBLISHED` y `CLOSED` exponen el
+contenido administrativo y `isCorrect` en modo de solo lectura, respetando
+`BR-005`.
+
+Los resultados administrativos usan una respuesta paginada explícita que
+incluye únicamente alias, estado, puntuación, total, porcentaje, fechas y
+duración. El frontend trata como nulos los valores todavía no calculados de una
+participación `ACTIVE`. El backend mapea este DTO sin propagar
+`accessTokenHash`, `normalizedAlias` ni otros campos internos. El ranking
+administrativo reutiliza la forma pública aprobada, pero exige Bearer.
+
+Las transiciones administrativas se concentran en el detalle y se derivan
+exclusivamente del estado contractual. `DRAFT` habilita publicación y
+eliminación, `PUBLISHED` expone el enlace `/quiz/:publicId` y permite cierre, y
+`CLOSED` no ofrece nuevas transiciones. Todas las acciones requieren
+confirmación y bloquean envíos repetidos. La publicación actualiza el detalle
+con la respuesta aprobada; el cierre vuelve a consultar el estado autoritativo
+y las tres operaciones invalidan el listado administrativo afectado. Un
+rechazo recuperable conserva la página y un `401` reutiliza la limpieza global
+de sesión.
 
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto
