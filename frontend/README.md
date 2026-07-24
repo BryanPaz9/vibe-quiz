@@ -127,5 +127,14 @@ El checkpoint de creación administrativa está implementado:
 - Conservación del formulario ante errores recuperables.
 - Navegación al detalle creado usando el identificador del backend.
 
-El detalle y la edición administrativa permanecen como la siguiente entrega
+El checkpoint de detalle y edición administrativa está implementado:
+
+- Consulta Bearer mediante `GET /admin/quizzes/:quizId`.
+- Precarga del agregado y reutilización del editor completo para borradores.
+- Reemplazo transaccional mediante `PUT /admin/quizzes/:quizId`.
+- Vista de solo lectura para cuestionarios `PUBLISHED` y `CLOSED`.
+- Presentación administrativa de respuestas correctas y fechas contractuales.
+- Conservación de cambios locales ante errores recuperables.
+
+Las transiciones de estado y eliminación permanecen como la siguiente entrega
 funcional.

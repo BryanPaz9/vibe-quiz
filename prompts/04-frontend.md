@@ -211,7 +211,35 @@ feature implementation.
 - Playwright covers login, list navigation, aggregate creation and navigation
   to the returned detail route.
 
+## Administrative quiz detail and editing checkpoint 3
+
+### Scope
+
+- Replace the `/admin/quizzes/:id` placeholder.
+- Retrieve the approved administrative aggregate through
+  `GET /admin/quizzes/:quizId` with Bearer authentication.
+- Pre-fill and reuse the aggregate editor only when status is `DRAFT`.
+- Replace a valid draft through `PUT /admin/quizzes/:quizId`.
+- Render `PUBLISHED` and `CLOSED` content, dates and correct answers in
+  read-only mode.
+- Preserve local edits after recoverable update errors and reuse global
+  administrative `401` handling.
+
+### Traceability
+
+- Functional requirements: `FR-003`, `FR-004`, `FR-006`, `FR-007`.
+- User stories: `US-003`, `US-004`.
+- Business rules: `BR-002`, `BR-003`, `BR-004`, `BR-005`.
+- Acceptance criteria: `AC-003`, `AC-004`.
+
+### Evidence
+
+- Component tests cover Bearer detail retrieval, draft pre-fill, full
+  replacement, read-only states, retry, update conflicts and `401`.
+- The creation and editing pages share the same validated aggregate form.
+- Playwright covers login, list navigation, detail retrieval and draft update.
+
 ### Remaining frontend work
 
-- Implement administrative detail and draft editing in the next checkpoint
-  against the approved `/admin/quizzes/:quizId` contracts.
+- Implement publication, closing and valid draft deletion in the next
+  checkpoint against the approved lifecycle contracts.

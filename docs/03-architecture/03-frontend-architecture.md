@@ -154,6 +154,9 @@ marcadores explícitos hasta sus respectivas entregas.
 6. **Creación administrativa — implementada:** formulario dinámico del
    agregado, validación contractual, posiciones explícitas, selección de la
    respuesta correcta y creación autenticada.
+7. **Detalle y edición — implementados:** consulta del agregado administrativo,
+   edición completa para borradores y representación de solo lectura para
+   estados no editables.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
 `GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
@@ -177,6 +180,14 @@ el payload; no se envían identificadores, estados ni valores calculados fuera
 de `QuizContentInput`. Tras `POST /admin/quizzes`, el identificador de la
 respuesta dirige a `/admin/quizzes/:id`. Los errores recuperables conservan el
 contenido y un `401` reutiliza el mecanismo global de sesión.
+
+El detalle consulta `GET /admin/quizzes/:quizId` con una clave propia de
+TanStack Query. Los cuestionarios `DRAFT` reutilizan el mismo editor de la
+creación y `PUT /admin/quizzes/:quizId` reemplaza el agregado completo con
+posiciones recalculadas. La respuesta exitosa actualiza la caché del detalle e
+invalida únicamente los listados. Los estados `PUBLISHED` y `CLOSED` exponen el
+contenido administrativo y `isCorrect` en modo de solo lectura, respetando
+`BR-005`.
 
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto

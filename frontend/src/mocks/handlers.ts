@@ -120,6 +120,68 @@ export const handlers = [
       { status: 201 },
     );
   }),
+  http.get(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json(adminQuizDetailFixture);
+    },
+  ),
+  http.put(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}`,
+    async ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      const body = (await request.json()) as QuizContentInput;
+      return HttpResponse.json({
+        ...adminQuizDetailFixture,
+        title: body.title,
+        description: body.description ?? null,
+        questions: body.questions.map((question, questionIndex) => ({
+          ...question,
+          id: `updated-question-${questionIndex + 1}`,
+          options: question.options.map((option, optionIndex) => ({
+            ...option,
+            id: `updated-option-${questionIndex + 1}-${optionIndex + 1}`,
+          })),
+        })),
+        updatedAt: '2026-07-23T18:00:00.000Z',
+      });
+    },
+  ),
   http.get(`${baseUrl}/public/quizzes/${publicQuizFixture.publicId}`, () =>
     HttpResponse.json(publicQuizFixture),
   ),

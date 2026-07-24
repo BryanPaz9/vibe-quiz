@@ -41,3 +41,20 @@ export function createAdminQuiz(
     method: 'POST',
   });
 }
+
+export function getAdminQuiz(quizId: string): Promise<AdminQuizDetail> {
+  return apiRequest<AdminQuizDetail>(`/admin/quizzes/${quizId}`, {
+    authentication: { kind: 'admin' },
+  });
+}
+
+export function updateAdminQuiz(
+  quizId: string,
+  request: QuizContentInput,
+): Promise<AdminQuizDetail> {
+  return apiRequest<AdminQuizDetail>(`/admin/quizzes/${quizId}`, {
+    authentication: { kind: 'admin' },
+    body: request,
+    method: 'PUT',
+  });
+}

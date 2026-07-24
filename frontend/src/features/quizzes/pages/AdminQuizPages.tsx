@@ -14,6 +14,7 @@ import {
 import { PlaceholderPage } from '@/shared/components/PlaceholderPage';
 import type { QuizStatus } from '@/shared/types/api';
 export { QuizCreatePage } from './QuizCreatePage';
+export { QuizDetailPage } from './QuizDetailPage';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 20;
@@ -242,15 +243,6 @@ export function QuizListPage() {
         </>
       )}
     </PageContainer>
-  );
-}
-
-export function QuizDetailPage() {
-  return (
-    <PlaceholderPage
-      description="Detalle y edición del contenido cuando el estado sea DRAFT."
-      title="Detalle del cuestionario"
-    />
   );
 }
 

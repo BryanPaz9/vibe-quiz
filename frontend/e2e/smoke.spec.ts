@@ -121,6 +121,12 @@ test('authenticates and creates an administrative quiz', async ({ page }) => {
     });
     await route.fulfill({ json: adminQuizDetailFixture, status: 201 });
   });
+  await page.route(
+    `**/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+    async (route) => {
+      await route.fulfill({ json: adminQuizDetailFixture });
+    },
+  );
   await page.goto('/admin/quizzes');
 
   await page.getByLabel('Correo electrónico').fill(adminFixture.email);
@@ -140,8 +146,52 @@ test('authenticates and creates an administrative quiz', async ({ page }) => {
   await expect(page).toHaveURL(
     new RegExp(`/admin/quizzes/${adminQuizDetailFixture.id}$`),
   );
+  await expect(page.getByLabel('Título')).toBeVisible();
+});
+
+test('loads and edits an administrative draft', async ({ page }) => {
+  await page.route('**/api/v1/auth/login', async (route) => {
+    await route.fulfill({ json: loginFixture });
+  });
+  await page.route('**/api/v1/auth/me', async (route) => {
+    await route.fulfill({ json: adminFixture });
+  });
+  await page.route('**/api/v1/admin/quizzes?**', async (route) => {
+    await route.fulfill({ json: adminQuizListFixture });
+  });
+  await page.route(
+    `**/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+    async (route) => {
+      expect(route.request().headers()['authorization']).toBe(
+        `Bearer ${loginFixture.accessToken}`,
+      );
+      if (route.request().method() === 'PUT') {
+        const request = route.request().postDataJSON();
+        expect(request.title).toBe('Fundamentos actualizados');
+        await route.fulfill({
+          json: {
+            ...adminQuizDetailFixture,
+            title: request.title,
+            updatedAt: '2026-07-23T18:00:00.000Z',
+          },
+        });
+        return;
+      }
+      await route.fulfill({ json: adminQuizDetailFixture });
+    },
+  );
+  await page.goto('/admin/quizzes');
+
+  await page.getByLabel('Correo electrónico').fill(adminFixture.email);
+  await page.getByLabel('Contraseña').fill('correct-password');
+  await page.getByRole('button', { name: 'Ingresar' }).click();
+  await page.getByRole('link', { name: adminQuizDetailFixture.title }).click();
+
+  await page.getByLabel('Título').fill('Fundamentos actualizados');
+  await page.getByRole('button', { name: 'Guardar cambios' }).click();
+
   await expect(
-    page.getByRole('heading', { name: 'Detalle del cuestionario' }),
+    page.getByText('Los cambios se guardaron correctamente.'),
   ).toBeVisible();
 });
 
