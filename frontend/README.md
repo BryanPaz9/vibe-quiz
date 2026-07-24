@@ -117,5 +117,15 @@ implementado y conserva trazabilidad con `FR-003`, `US-003`, `AC-001`,
 - Navegación hacia los placeholders aprobados de creación y detalle.
 - Limpieza global de la sesión y regreso al login ante `401`.
 
-La creación y el detalle administrativo permanecen como las siguientes
-entregas funcionales.
+El checkpoint de creación administrativa está implementado:
+
+- Formulario dinámico para el agregado completo del cuestionario.
+- Gestión y orden explícito de preguntas y opciones.
+- Una única respuesta correcta por pregunta.
+- Validación de los límites aprobados antes de enviar.
+- Creación Bearer mediante `POST /admin/quizzes`.
+- Conservación del formulario ante errores recuperables.
+- Navegación al detalle creado usando el identificador del backend.
+
+El detalle y la edición administrativa permanecen como la siguiente entrega
+funcional.

@@ -13,6 +13,7 @@ import {
 } from '@/shared/components';
 import { PlaceholderPage } from '@/shared/components/PlaceholderPage';
 import type { QuizStatus } from '@/shared/types/api';
+export { QuizCreatePage } from './QuizCreatePage';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 20;
@@ -241,15 +242,6 @@ export function QuizListPage() {
         </>
       )}
     </PageContainer>
-  );
-}
-
-export function QuizCreatePage() {
-  return (
-    <PlaceholderPage
-      description="Creación del agregado completo en estado borrador."
-      title="Crear cuestionario"
-    />
   );
 }
 

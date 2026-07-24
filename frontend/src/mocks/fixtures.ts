@@ -1,4 +1,5 @@
 import type {
+  AdminQuizDetail,
   AdminIdentity,
   LoginResponse,
   QuizListResponse,
@@ -40,6 +41,39 @@ export const adminQuizListFixture: QuizListResponse = {
     total: 1,
     totalPages: 1,
   },
+};
+
+export const adminQuizDetailFixture: AdminQuizDetail = {
+  id: adminQuizListFixture.data[0].id,
+  publicId: adminQuizListFixture.data[0].publicId,
+  title: adminQuizListFixture.data[0].title,
+  description: adminQuizListFixture.data[0].description,
+  status: 'DRAFT',
+  questions: [
+    {
+      id: '88888888-8888-4888-8888-888888888888',
+      text: '¿Qué significa IA?',
+      position: 1,
+      options: [
+        {
+          id: '99999999-9999-4999-8999-999999999999',
+          text: 'Inteligencia Artificial',
+          position: 1,
+          isCorrect: true,
+        },
+        {
+          id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+          text: 'Interfaz Abierta',
+          position: 2,
+          isCorrect: false,
+        },
+      ],
+    },
+  ],
+  createdAt: adminQuizListFixture.data[0].createdAt,
+  updatedAt: adminQuizListFixture.data[0].updatedAt,
+  publishedAt: null,
+  closedAt: null,
 };
 
 export const publicQuizFixture: PublicQuiz = {

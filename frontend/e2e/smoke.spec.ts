@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   adminFixture,
+  adminQuizDetailFixture,
   adminQuizListFixture,
   loginFixture,
   participationFixture,
@@ -83,6 +84,64 @@ test('authenticates and lists administrative quizzes', async ({ page }) => {
   await expect(page.getByRole('cell', { name: 'Borrador' })).toBeVisible();
   await expect(
     page.getByRole('link', { name: 'Crear cuestionario' }),
+  ).toBeVisible();
+});
+
+test('authenticates and creates an administrative quiz', async ({ page }) => {
+  await page.route('**/api/v1/auth/login', async (route) => {
+    await route.fulfill({ json: loginFixture });
+  });
+  await page.route('**/api/v1/auth/me', async (route) => {
+    await route.fulfill({ json: adminFixture });
+  });
+  await page.route('**/api/v1/admin/quizzes?**', async (route) => {
+    await route.fulfill({ json: adminQuizListFixture });
+  });
+  await page.route('**/api/v1/admin/quizzes', async (route) => {
+    if (route.request().method() !== 'POST') {
+      await route.fallback();
+      return;
+    }
+    expect(route.request().headers()['authorization']).toBe(
+      `Bearer ${loginFixture.accessToken}`,
+    );
+    expect(route.request().postDataJSON()).toEqual({
+      title: 'Arquitectura web',
+      description: 'Evaluación del módulo',
+      questions: [
+        {
+          text: '¿Qué protocolo utiliza la web?',
+          position: 1,
+          options: [
+            { text: 'HTTP', position: 1, isCorrect: true },
+            { text: 'SMTP', position: 2, isCorrect: false },
+          ],
+        },
+      ],
+    });
+    await route.fulfill({ json: adminQuizDetailFixture, status: 201 });
+  });
+  await page.goto('/admin/quizzes');
+
+  await page.getByLabel('Correo electrónico').fill(adminFixture.email);
+  await page.getByLabel('Contraseña').fill('correct-password');
+  await page.getByRole('button', { name: 'Ingresar' }).click();
+  await page.getByRole('link', { name: 'Crear cuestionario' }).click();
+
+  await page.getByLabel('Título').fill('Arquitectura web');
+  await page.getByLabel('Descripción (opcional)').fill('Evaluación del módulo');
+  await page
+    .getByLabel('Texto de la pregunta')
+    .fill('¿Qué protocolo utiliza la web?');
+  await page.getByRole('textbox', { name: 'Opción 1' }).fill('HTTP');
+  await page.getByRole('textbox', { name: 'Opción 2' }).fill('SMTP');
+  await page.getByRole('button', { name: 'Crear cuestionario' }).click();
+
+  await expect(page).toHaveURL(
+    new RegExp(`/admin/quizzes/${adminQuizDetailFixture.id}$`),
+  );
+  await expect(
+    page.getByRole('heading', { name: 'Detalle del cuestionario' }),
   ).toBeVisible();
 });
 

@@ -151,6 +151,9 @@ marcadores explícitos hasta sus respectivas entregas.
 5. **Listado administrativo — implementado:** consulta Bearer, paginación,
    búsqueda y filtro por estado sincronizados con la URL, estados de consulta y
    navegación a creación y detalle.
+6. **Creación administrativa — implementada:** formulario dinámico del
+   agregado, validación contractual, posiciones explícitas, selección de la
+   respuesta correcta y creación autenticada.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
 `GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
@@ -166,6 +169,14 @@ Router conserva esos parámetros en la URL. La página vuelve a `1` al aplicar
 una búsqueda o cambiar el estado, mientras que los controles de navegación se
 derivan exclusivamente de `meta` en la respuesta. Un `401` reutiliza la
 limpieza global de sesión y la ruta protegida devuelve al login.
+
+La creación utiliza React Hook Form con arreglos anidados para preguntas y
+opciones, y Zod replica los límites aprobados del contrato y del modelo de
+datos. El orden visual se transforma en posiciones correlativas al construir
+el payload; no se envían identificadores, estados ni valores calculados fuera
+de `QuizContentInput`. Tras `POST /admin/quizzes`, el identificador de la
+respuesta dirige a `/admin/quizzes/:id`. Los errores recuperables conservan el
+contenido y un `401` reutiliza el mecanismo global de sesión.
 
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto

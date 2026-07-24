@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import {
   adminFixture,
+  adminQuizDetailFixture,
   adminQuizListFixture,
   loginFixture,
   participationFixture,
@@ -10,6 +11,7 @@ import {
 } from './fixtures';
 import type {
   LoginRequest,
+  QuizContentInput,
   StartParticipationRequest,
 } from '@/shared/types/api';
 
@@ -80,6 +82,43 @@ export const handlers = [
       );
     }
     return HttpResponse.json(adminQuizListFixture);
+  }),
+  http.post(`${baseUrl}/admin/quizzes`, async ({ request }) => {
+    if (
+      request.headers.get('Authorization') !==
+      `Bearer ${loginFixture.accessToken}`
+    ) {
+      return HttpResponse.json(
+        {
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Unauthorized',
+            details: [],
+            requestId: 'request-id',
+            timestamp: '2026-07-23T12:00:00.000Z',
+            path: '/api/v1/admin/quizzes',
+          },
+        },
+        { status: 401 },
+      );
+    }
+    const body = (await request.json()) as QuizContentInput;
+    return HttpResponse.json(
+      {
+        ...adminQuizDetailFixture,
+        title: body.title,
+        description: body.description ?? null,
+        questions: body.questions.map((question, questionIndex) => ({
+          ...question,
+          id: `question-${questionIndex + 1}`,
+          options: question.options.map((option, optionIndex) => ({
+            ...option,
+            id: `option-${questionIndex + 1}-${optionIndex + 1}`,
+          })),
+        })),
+      },
+      { status: 201 },
+    );
   }),
   http.get(`${baseUrl}/public/quizzes/${publicQuizFixture.publicId}`, () =>
     HttpResponse.json(publicQuizFixture),

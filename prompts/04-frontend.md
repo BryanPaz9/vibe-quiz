@@ -181,7 +181,37 @@ feature implementation.
   states, retry, URL filters, pagination, navigation and administrative `401`.
 - Playwright covers login followed by the authenticated administrative list.
 
+## Administrative quiz creation checkpoint 2
+
+### Scope
+
+- Replace the `/admin/quizzes/new` placeholder.
+- Build the complete aggregate with title, optional description, questions,
+  options, explicit order and exactly one correct answer per question.
+- Apply the approved length and minimum-count validation rules.
+- Support accessible add, remove, move-up and move-down controls.
+- Submit only the approved `QuizContentInput` fields through
+  `POST /admin/quizzes` with Bearer authentication.
+- Preserve the form after recoverable errors and navigate to the returned
+  administrative detail identifier after success.
+
+### Traceability
+
+- Functional requirements: `FR-002`, `FR-006`, `FR-007`.
+- User story: `US-002`.
+- Business rules: `BR-001`, `BR-002`, `BR-003`, `BR-004`.
+- Acceptance criteria: `AC-002`, `AC-003`.
+
+### Evidence
+
+- Component tests cover client validation, dynamic aggregate management,
+  explicit positions, correct-answer selection, Bearer authorization, retry
+  and administrative `401`.
+- MSW implements the approved creation shape without additional fields.
+- Playwright covers login, list navigation, aggregate creation and navigation
+  to the returned detail route.
+
 ### Remaining frontend work
 
-- Implement creation and administrative detail in later checkpoints against
-  the approved `/admin/quizzes` contracts.
+- Implement administrative detail and draft editing in the next checkpoint
+  against the approved `/admin/quizzes/:quizId` contracts.

@@ -1,5 +1,10 @@
 import { apiRequest } from '@/shared/api';
-import type { QuizListResponse, QuizStatus } from '@/shared/types/api';
+import type {
+  AdminQuizDetail,
+  QuizContentInput,
+  QuizListResponse,
+  QuizStatus,
+} from '@/shared/types/api';
 
 export interface AdminQuizListParams {
   page: number;
@@ -24,5 +29,15 @@ export function getAdminQuizzes({
 
   return apiRequest<QuizListResponse>(`/admin/quizzes?${query.toString()}`, {
     authentication: { kind: 'admin' },
+  });
+}
+
+export function createAdminQuiz(
+  request: QuizContentInput,
+): Promise<AdminQuizDetail> {
+  return apiRequest<AdminQuizDetail>('/admin/quizzes', {
+    authentication: { kind: 'admin' },
+    body: request,
+    method: 'POST',
   });
 }
