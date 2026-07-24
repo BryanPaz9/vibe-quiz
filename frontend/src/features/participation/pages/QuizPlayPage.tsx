@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { m } from 'motion/react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { ElapsedTimer } from '@/features/participation/components/ElapsedTimer';
 import { usePublicQuiz } from '@/features/participation/hooks/use-public-quiz';
 import { useSubmitParticipation } from '@/features/participation/hooks/use-submit-participation';
 import {
@@ -53,6 +54,9 @@ export default function QuizPlayPage() {
     session ? getParticipationAnswers(session.participationId) : {},
   );
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [timerStartedAt] = useState(
+    () => session?.startedAt ?? new Date().toISOString(),
+  );
 
   if (!publicId || !session) {
     return (
@@ -164,16 +168,21 @@ export default function QuizPlayPage() {
 
   return (
     <PageContainer
-      actions={
+      eyebrow={`Participando como ${session.alias}`}
+      title={quiz.title}
+    >
+      <div
+        aria-label="Progreso del cuestionario"
+        className="quiz-player-status"
+        role="region"
+      >
         <Badge
           tone={answeredCount === questions.length ? 'success' : 'neutral'}
         >
           {answeredCount} de {questions.length} respondidas
         </Badge>
-      }
-      eyebrow={`Participando como ${session.alias}`}
-      title={quiz.title}
-    >
+        <ElapsedTimer startedAt={timerStartedAt} />
+      </div>
       <div className="quiz-player">
         {questions.map((question, questionIndex) => (
           <m.fieldset

@@ -346,3 +346,23 @@ feature implementation.
   despite decorative icons and motion wrappers.
 - Production build, lint, formatting, unit/component tests and Playwright
   validate the checkpoint.
+
+## Sticky creation controls and participation timer
+
+### Scope
+
+- Keep a responsive sticky editor action visible while the administrator adds
+  many questions.
+- Display the current question count, append from the shortcut, scroll to the
+  new question and move keyboard focus to its text field.
+- Persist the approved participation `startedAt` in the per-tab session.
+- Display a purple, responsive count-up timer beside answer progress.
+- Keep the timer motivational only; final duration remains authoritative from
+  the backend.
+
+### Evidence
+
+- Component tests cover count-up formatting, restoration from `startedAt`,
+  sticky question addition, scroll and focus.
+- Existing quiz creation and participation journeys remain unchanged at the
+  API boundary.

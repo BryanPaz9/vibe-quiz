@@ -172,6 +172,10 @@ El checkpoint de experiencia visual incorpora:
 - Indicadores de carga en consultas y botones con mutaciones pendientes.
 - Motion para transiciones en edición y resolución, respetando la preferencia
   de movimiento reducido del sistema.
+- Barra sticky del editor con conteo, creación inmediata y foco automático en
+  la nueva pregunta.
+- Cronómetro ascendente y responsive durante la participación, restaurado desde
+  `startedAt` sin reemplazar la duración autoritativa del backend.
 
 La sesión administrativa continúa exclusivamente en memoria por decisión de
 seguridad. Una recarga requiere autenticarse nuevamente; persistencia o

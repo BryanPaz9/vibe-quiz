@@ -194,6 +194,22 @@ describe('administrative quiz creation', () => {
     ).toBeChecked();
   });
 
+  it('keeps a sticky shortcut available and focuses a new question', async () => {
+    Element.prototype.scrollIntoView = vi.fn();
+    renderCreatePage();
+
+    expect(screen.getByText('1 pregunta')).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Nueva pregunta' }),
+    );
+
+    expect(await screen.findByText('2 preguntas')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getAllByLabelText('Texto de la pregunta')[1]).toHaveFocus(),
+    );
+    expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
+  });
+
   it('preserves the form after an API error and allows retry', async () => {
     let attempts = 0;
     server.use(

@@ -224,6 +224,16 @@ decoran cambios de preguntas, opciones y selección sin modificar estado de
 negocio ni retrasar solicitudes. Los estados pendientes continúan
 representados por loaders de consulta y spinners en botones de mutación.
 
+El editor conserva una barra de acciones sticky con el total de preguntas. Al
+agregar una pregunta desde esa barra, React Hook Form actualiza el arreglo y la
+interfaz desplaza y enfoca el nuevo textarea después de renderizarlo. En el
+flujo público, la sesión por pestaña conserva también el `startedAt` ya devuelto
+por el contrato de participación. Un cronómetro ascendente deriva su valor de
+esa fecha, continúa tras recargar la pestaña y permanece visible junto al
+progreso mediante una barra responsive. Este valor es motivacional: la
+duración mostrada en resultados sigue siendo exclusivamente la calculada por el
+backend.
+
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto
 se almacena en `sessionStorage` bajo el identificador de participación y

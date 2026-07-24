@@ -80,7 +80,10 @@ function QuestionEditor({
   }
 
   return (
-    <fieldset className="panel quiz-editor-question">
+    <fieldset
+      className="panel quiz-editor-question"
+      data-question-index={index}
+    >
       <legend>Pregunta {index + 1}</legend>
       <div className="quiz-editor-toolbar">
         <Button
@@ -236,6 +239,20 @@ export function QuizContentForm({
     remove: removeQuestion,
   } = useFieldArray({ control, name: 'questions' });
 
+  function addQuestion() {
+    const nextQuestionIndex = questionFields.length;
+    appendQuestion(emptyQuestion, { shouldFocus: false });
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const question = document.querySelector<HTMLElement>(
+          `[data-question-index="${nextQuestionIndex}"]`,
+        );
+        question?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+        question?.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+      });
+    });
+  }
+
   async function submit(values: QuizContentFormValues) {
     const request: QuizContentInput = {
       title: values.title,
@@ -283,11 +300,7 @@ export function QuizContentForm({
             correcta.
           </p>
         </div>
-        <Button
-          onClick={() => appendQuestion(emptyQuestion)}
-          type="button"
-          variant="secondary"
-        >
+        <Button onClick={addQuestion} type="button" variant="secondary">
           <FontAwesomeIcon aria-hidden="true" icon={faPlus} />
           <span>Agregar pregunta</span>
         </Button>
@@ -318,6 +331,20 @@ export function QuizContentForm({
           </m.div>
         ))}
       </AnimatePresence>
+
+      <aside
+        aria-label="Acciones rápidas del editor"
+        className="quiz-editor-sticky-actions"
+      >
+        <span>
+          {questionFields.length}{' '}
+          {questionFields.length === 1 ? 'pregunta' : 'preguntas'}
+        </span>
+        <Button onClick={addQuestion} type="button">
+          <FontAwesomeIcon aria-hidden="true" icon={faPlus} />
+          <span>Nueva pregunta</span>
+        </Button>
+      </aside>
 
       {errors.questions?.root?.message && (
         <p className="field__error" role="alert">
