@@ -7,6 +7,7 @@ import {
   loginFixture,
   participationFixture,
   participationResultFixture,
+  publishQuizFixture,
   publicQuizFixture,
   rankingFixture,
 } from './fixtures';
@@ -181,6 +182,83 @@ export const handlers = [
         })),
         updatedAt: '2026-07-23T18:00:00.000Z',
       });
+    },
+  ),
+  http.post(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}/publish`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/publish`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json(publishQuizFixture);
+    },
+  ),
+  http.post(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}/close`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/close`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return HttpResponse.json({
+        ...adminQuizDetailFixture,
+        status: 'CLOSED',
+        publishedAt: publishQuizFixture.publishedAt,
+        closedAt: '2026-07-23T16:00:00.000Z',
+      });
+    },
+  ),
+  http.delete(
+    `${baseUrl}/admin/quizzes/${adminQuizDetailFixture.id}`,
+    ({ request }) => {
+      if (
+        request.headers.get('Authorization') !==
+        `Bearer ${loginFixture.accessToken}`
+      ) {
+        return HttpResponse.json(
+          {
+            error: {
+              code: 'UNAUTHORIZED',
+              message: 'Unauthorized',
+              details: [],
+              requestId: 'request-id',
+              timestamp: '2026-07-23T12:00:00.000Z',
+              path: `/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+            },
+          },
+          { status: 401 },
+        );
+      }
+      return new HttpResponse(null, { status: 204 });
     },
   ),
   http.get(

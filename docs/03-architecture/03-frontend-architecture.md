@@ -160,6 +160,9 @@ marcadores explícitos hasta sus respectivas entregas.
 8. **Resultados y ranking administrativos — implementados:** resultados
    paginados, estados activos/completados, ranking autenticado y navegación
    desde el detalle.
+9. **Ciclo de vida administrativo — implementado:** publicación de borradores,
+   enlace público copiable, cierre de cuestionarios publicados y eliminación
+   confirmada de borradores elegibles.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
 `GET /auth/me` antes de habilitar el panel. El JWT y su vencimiento se conservan
@@ -198,6 +201,16 @@ duración. El frontend trata como nulos los valores todavía no calculados de un
 participación `ACTIVE`. El backend mapea este DTO sin propagar
 `accessTokenHash`, `normalizedAlias` ni otros campos internos. El ranking
 administrativo reutiliza la forma pública aprobada, pero exige Bearer.
+
+Las transiciones administrativas se concentran en el detalle y se derivan
+exclusivamente del estado contractual. `DRAFT` habilita publicación y
+eliminación, `PUBLISHED` expone el enlace `/quiz/:publicId` y permite cierre, y
+`CLOSED` no ofrece nuevas transiciones. Todas las acciones requieren
+confirmación y bloquean envíos repetidos. La publicación actualiza el detalle
+con la respuesta aprobada; el cierre vuelve a consultar el estado autoritativo
+y las tres operaciones invalidan el listado administrativo afectado. Un
+rechazo recuperable conserva la página y un `401` reutiliza la limpieza global
+de sesión.
 
 La entrada utiliza `GET /public/quizzes/:publicId` y
 `POST /public/quizzes/:publicId/participations`. El token opaco devuelto

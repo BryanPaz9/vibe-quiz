@@ -3,6 +3,7 @@ import type {
   AdminQuizDetail,
   AdminIdentity,
   LoginResponse,
+  PublishQuizResponse,
   QuizListResponse,
   PublicQuiz,
   ParticipationResult,
@@ -75,6 +76,14 @@ export const adminQuizDetailFixture: AdminQuizDetail = {
   updatedAt: adminQuizListFixture.data[0].updatedAt,
   publishedAt: null,
   closedAt: null,
+};
+
+export const publishQuizFixture: PublishQuizResponse = {
+  id: adminQuizDetailFixture.id,
+  publicId: adminQuizDetailFixture.publicId,
+  status: 'PUBLISHED',
+  publishedAt: '2026-07-23T15:00:00.000Z',
+  publicUrlPath: `/quiz/${adminQuizDetailFixture.publicId}`,
 };
 
 export const adminQuizResultsFixture: AdminQuizResultsResponse = {

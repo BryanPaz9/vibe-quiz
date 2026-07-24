@@ -4,6 +4,7 @@ import type {
   QuizContentInput,
   QuizListResponse,
   QuizStatus,
+  PublishQuizResponse,
 } from '@/shared/types/api';
 
 export interface AdminQuizListParams {
@@ -56,5 +57,26 @@ export function updateAdminQuiz(
     authentication: { kind: 'admin' },
     body: request,
     method: 'PUT',
+  });
+}
+
+export function publishAdminQuiz(quizId: string): Promise<PublishQuizResponse> {
+  return apiRequest<PublishQuizResponse>(`/admin/quizzes/${quizId}/publish`, {
+    authentication: { kind: 'admin' },
+    method: 'POST',
+  });
+}
+
+export function closeAdminQuiz(quizId: string): Promise<unknown> {
+  return apiRequest<unknown>(`/admin/quizzes/${quizId}/close`, {
+    authentication: { kind: 'admin' },
+    method: 'POST',
+  });
+}
+
+export function deleteAdminQuiz(quizId: string): Promise<void> {
+  return apiRequest<void>(`/admin/quizzes/${quizId}`, {
+    authentication: { kind: 'admin' },
+    method: 'DELETE',
   });
 }

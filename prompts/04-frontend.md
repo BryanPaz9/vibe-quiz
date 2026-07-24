@@ -277,7 +277,39 @@ feature implementation.
 - Backend API tests prevent exposure of access hashes and normalized aliases.
 - Playwright covers login, detail, administrative results and ranking.
 
+## Administrative quiz lifecycle checkpoint 5
+
+### Scope
+
+- Publish a `DRAFT` quiz through the approved Bearer endpoint after explicit
+  confirmation.
+- Display, open and copy the public participation URL after publication.
+- Close a `PUBLISHED` quiz after explicit confirmation and refresh its
+  authoritative state.
+- Permanently delete only an eligible `DRAFT` quiz after destructive
+  confirmation.
+- Expose controls only for valid transitions, prevent repeated submissions and
+  preserve the detail after recoverable conflicts.
+- Reuse global administrative `401` handling.
+
+### Traceability
+
+- Functional requirements: `FR-005`, `FR-008`.
+- User stories: `US-005`, `US-006`.
+- Business rules: `BR-001`, `BR-005`.
+- Open decisions resolved by the approved contract: `OD-003`, `OD-007`.
+- Acceptance criteria: `AC-005`, `AC-006`, `AC-007`.
+
+### Evidence
+
+- Component tests cover publication, public URL copy, closing, eligible
+  deletion, rejected deletion, Bearer authorization and administrative `401`.
+- MSW fixtures reproduce the exact approved publication response and lifecycle
+  endpoints.
+- Playwright covers login followed by publication, public-link exposure and
+  closing.
+
 ### Remaining frontend work
 
-- Implement publication, closing and valid draft deletion against the approved
-  lifecycle contracts before the final browser-validation checkpoint.
+- Run the final integrated browser-validation checkpoint against the real
+  backend and its supported database.

@@ -98,6 +98,14 @@ export interface AdminQuizDetail {
   closedAt: string | null;
 }
 
+export interface PublishQuizResponse {
+  id: string;
+  publicId: string;
+  status: 'PUBLISHED';
+  publishedAt: string;
+  publicUrlPath: string;
+}
+
 export interface PublicQuizOption {
   id: string;
   text: string;

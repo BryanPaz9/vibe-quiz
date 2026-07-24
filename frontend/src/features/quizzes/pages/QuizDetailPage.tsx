@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
+import { QuizLifecyclePanel } from '@/features/quizzes/components/QuizLifecyclePanel';
 import { QuizContentForm } from '@/features/quizzes/components/QuizContentForm';
 import { useAdminQuiz } from '@/features/quizzes/hooks/use-admin-quizzes';
 import { useUpdateAdminQuiz } from '@/features/quizzes/hooks/use-update-admin-quiz';
@@ -160,6 +161,8 @@ export function QuizDetailPage() {
       eyebrow="Administración"
       title="Detalle del cuestionario"
     >
+      <QuizLifecyclePanel quiz={quiz} />
+
       {quiz.status === 'DRAFT' ? (
         <QuizContentForm
           cancelTo="/admin/quizzes"

@@ -923,6 +923,36 @@ code {
   margin-left: 0.65rem;
 }
 
+.lifecycle {
+  display: grid;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.lifecycle h2,
+.lifecycle p {
+  margin: 0;
+}
+
+.lifecycle__eyebrow {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lifecycle__public-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow-wrap: anywhere;
+}
+
 .dialog-backdrop {
   position: fixed;
   z-index: 50;
@@ -1034,6 +1064,11 @@ code {
 
   .quiz-detail-metadata {
     grid-template-columns: 1fr;
+  }
+
+  .lifecycle__public-link {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
 

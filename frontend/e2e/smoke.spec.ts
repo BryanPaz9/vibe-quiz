@@ -7,6 +7,7 @@ import {
   loginFixture,
   participationFixture,
   participationResultFixture,
+  publishQuizFixture,
   publicQuizFixture,
   rankingFixture,
 } from '../src/mocks/fixtures';
@@ -246,6 +247,80 @@ test('consults administrative results and ranking', async ({ page }) => {
   await expect(page.getByRole('row', { name: /Ada Completada/ })).toBeVisible();
   await page.getByRole('link', { name: 'Ver ranking' }).click();
   await expect(page.getByRole('row', { name: /#1 Ada/ })).toBeVisible();
+});
+
+test('publishes and closes an administrative quiz', async ({ page }) => {
+  let status: 'DRAFT' | 'PUBLISHED' | 'CLOSED' = 'DRAFT';
+  await page.route('**/api/v1/auth/login', async (route) => {
+    await route.fulfill({ json: loginFixture });
+  });
+  await page.route('**/api/v1/auth/me', async (route) => {
+    await route.fulfill({ json: adminFixture });
+  });
+  await page.route('**/api/v1/admin/quizzes?**', async (route) => {
+    await route.fulfill({ json: adminQuizListFixture });
+  });
+  await page.route(
+    `**/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/publish`,
+    async (route) => {
+      expect(route.request().headers()['authorization']).toBe(
+        `Bearer ${loginFixture.accessToken}`,
+      );
+      status = 'PUBLISHED';
+      await route.fulfill({ json: publishQuizFixture });
+    },
+  );
+  await page.route(
+    `**/api/v1/admin/quizzes/${adminQuizDetailFixture.id}/close`,
+    async (route) => {
+      expect(route.request().headers()['authorization']).toBe(
+        `Bearer ${loginFixture.accessToken}`,
+      );
+      status = 'CLOSED';
+      await route.fulfill({ json: { status } });
+    },
+  );
+  await page.route(
+    `**/api/v1/admin/quizzes/${adminQuizDetailFixture.id}`,
+    async (route) => {
+      await route.fulfill({
+        json: {
+          ...adminQuizDetailFixture,
+          status,
+          publishedAt:
+            status === 'DRAFT' ? null : publishQuizFixture.publishedAt,
+          closedAt: status === 'CLOSED' ? '2026-07-23T16:00:00.000Z' : null,
+        },
+      });
+    },
+  );
+  await page.goto(`/admin/quizzes/${adminQuizDetailFixture.id}`);
+
+  await page.getByLabel('Correo electrónico').fill(adminFixture.email);
+  await page.getByLabel('Contraseña').fill('correct-password');
+  await page.getByRole('button', { name: 'Ingresar' }).click();
+  await page.getByRole('button', { name: 'Publicar cuestionario' }).click();
+  await page.getByRole('button', { name: 'Publicar', exact: true }).click();
+
+  await expect(
+    page.getByRole('button', { name: 'Copiar enlace' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('link', {
+      name: new RegExp(`/quiz/${adminQuizDetailFixture.publicId}$`),
+    }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Cerrar cuestionario' }).click();
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Cerrar cuestionario' })
+    .click();
+
+  await expect(
+    page.getByText(
+      'El cuestionario está cerrado y ya no admite nuevas participaciones.',
+    ),
+  ).toBeVisible();
 });
 
 test('starts, resolves and submits a public quiz', async ({ page }) => {
