@@ -144,8 +144,9 @@ Option 1 --- * Answer
 - `participation(quizId, status, score)` para resultados y ranking.
 - `answer(participationId, questionId)` único.
 
-Para la demo, el índice de ranking podrá ampliarse con `durationMs` sin
-cambiar el modelo lógico.
+El ordenamiento incorpora `durationMs`, `completedAt` e `id`. El índice
+podrá ampliarse sin cambiar el modelo lógico si el volumen observado lo
+requiere.
 
 ## Invariantes de aplicación
 

@@ -270,6 +270,109 @@ describe('VibeQuiz API', () => {
       .expect(400);
   });
 
+  it('breaks tied ranking scores by the shortest server duration', async () => {
+    const quiz = await prisma.quiz.findFirstOrThrow({
+      where: { status: 'PUBLISHED' },
+    });
+    const completedAt = new Date('2026-07-23T12:00:00.000Z');
+
+    await prisma.participation.createMany({
+      data: [
+        {
+          id: '00000000-0000-4000-8000-000000000004',
+          quizId: quiz.id,
+          alias: 'Slow tie',
+          normalizedAlias: 'slow tie',
+          accessTokenHash: 'slow-tie-token',
+          status: 'COMPLETED',
+          startedAt: new Date('2026-07-23T11:59:00.000Z'),
+          completedAt,
+          durationMs: 60_000,
+          score: 0,
+          totalQuestions: 1,
+        },
+        {
+          id: '00000000-0000-4000-8000-000000000003',
+          quizId: quiz.id,
+          alias: 'Earlier tie',
+          normalizedAlias: 'earlier tie',
+          accessTokenHash: 'earlier-tie-token',
+          status: 'COMPLETED',
+          startedAt: new Date('2026-07-23T11:58:30.000Z'),
+          completedAt: new Date('2026-07-23T11:59:00.000Z'),
+          durationMs: 30_000,
+          score: 0,
+          totalQuestions: 1,
+        },
+        {
+          id: '00000000-0000-4000-8000-000000000001',
+          quizId: quiz.id,
+          alias: 'Stable tie A',
+          normalizedAlias: 'stable tie a',
+          accessTokenHash: 'stable-tie-a-token',
+          status: 'COMPLETED',
+          startedAt: new Date('2026-07-23T11:59:30.000Z'),
+          completedAt,
+          durationMs: 30_000,
+          score: 0,
+          totalQuestions: 1,
+        },
+        {
+          id: '00000000-0000-4000-8000-000000000002',
+          quizId: quiz.id,
+          alias: 'Stable tie B',
+          normalizedAlias: 'stable tie b',
+          accessTokenHash: 'stable-tie-b-token',
+          status: 'COMPLETED',
+          startedAt: new Date('2026-07-23T11:59:30.000Z'),
+          completedAt,
+          durationMs: 30_000,
+          score: 0,
+          totalQuestions: 1,
+        },
+        {
+          quizId: quiz.id,
+          alias: 'Still playing',
+          normalizedAlias: 'still playing',
+          accessTokenHash: 'active-tie-token',
+          status: 'ACTIVE',
+          score: 99,
+        },
+      ],
+    });
+
+    const publicRanking = await request(app.getHttpServer())
+      .get(`/api/v1/public/quizzes/${quiz.publicId}/ranking`)
+      .expect(200);
+    const publicAliases = (
+      publicRanking.body.entries as Array<{ alias: string }>
+    ).map((entry) => entry.alias);
+
+    expect(publicAliases.filter((alias) => alias.includes('tie'))).toEqual([
+      'Earlier tie',
+      'Stable tie A',
+      'Stable tie B',
+      'Slow tie',
+    ]);
+    expect(publicAliases).not.toContain('Still playing');
+
+    const adminRanking = await request(app.getHttpServer())
+      .get(`/api/v1/admin/quizzes/${quiz.id}/ranking`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    const adminAliases = (
+      adminRanking.body.entries as Array<{ alias: string }>
+    ).map((entry) => entry.alias);
+
+    expect(adminAliases.filter((alias) => alias.includes('tie'))).toEqual([
+      'Earlier tie',
+      'Stable tie A',
+      'Stable tie B',
+      'Slow tie',
+    ]);
+    expect(adminAliases).not.toContain('Still playing');
+  });
+
   it('rate limits repeated login attempts', async () => {
     const statuses: number[] = [];
     for (let attempt = 0; attempt < 5; attempt += 1) {

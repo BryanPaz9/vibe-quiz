@@ -48,7 +48,7 @@ No tendrá controladores; será utilizado por ParticipationsModule.
 
 - Ranking administrativo y público.
 - Orden base por puntuación.
-- Punto aislado de extensión para el desempate de la demo.
+- Desempate determinista por menor duración, finalización e identificador.
 
 ### HealthModule
 

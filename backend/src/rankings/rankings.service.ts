@@ -38,7 +38,12 @@ export class RankingsService {
   private async build(quizId: string, publicId: string) {
     const rows = await this.prisma.participation.findMany({
       where: { quizId, status: ParticipationStatus.COMPLETED },
-      orderBy: [{ score: 'desc' }, { completedAt: 'asc' }, { id: 'asc' }],
+      orderBy: [
+        { score: 'desc' },
+        { durationMs: 'asc' },
+        { completedAt: 'asc' },
+        { id: 'asc' },
+      ],
     });
     return {
       quizPublicId: publicId,
