@@ -146,3 +146,14 @@ una API REST documentada y consumible por el frontend.
 La API deberá responder de forma consistente ante validaciones fallidas,
 recursos inexistentes, operaciones no autorizadas y conflictos de
 estado, sin exponer información interna.
+
+## Orientación en la landing
+
+### FR-025 — Explorar los recorridos de la plataforma
+
+La landing deberá permitir que una persona visitante alterne entre los
+recorridos de administrador y participante, y consulte sus tres etapas
+aprobadas mediante navegación anterior, siguiente o selección directa.
+
+El recorrido utilizará exclusivamente contenido y estado local, sin
+consultar la API, persistir la selección ni modificar rutas.

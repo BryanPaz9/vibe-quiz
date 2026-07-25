@@ -28,6 +28,13 @@
 | FR-022 | US-008, US-015 | BR-020, OD-005 | AC-013, AC-014 |
 | FR-023 | Todas | Contrato de API por diseñar | AC-001 a AC-015 |
 | FR-024 | US-016 | — | AC-003, AC-010, AC-011, AC-015 |
+| FR-025 | US-018 | BR-022 | AC-018 a AC-022 |
+
+## Trazabilidad del recorrido interactivo
+
+| Requisito | Componente | Prueba de componente | Prueba E2E |
+|---|---|---|---|
+| FR-025 | `PlatformJourney` en `HomePage` | `platform-journey.test.tsx` | `explores both platform journeys from the landing` en `smoke.spec.ts` |
 
 ## Requisitos no funcionales
 

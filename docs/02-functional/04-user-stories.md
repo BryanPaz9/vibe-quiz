@@ -124,3 +124,13 @@ Como responsable de operación, quiero comprobar la salud del backend y
 la base de datos para diagnosticar el despliegue.
 
 Relacionada con: `NFR-017`.
+
+## Visitantes
+
+### US-018 — Comprender los recorridos de la plataforma
+
+Como visitante, quiero explorar en la landing las etapas del
+administrador y del participante para comprender ambas experiencias
+antes de comenzar.
+
+Relacionada con: `FR-025`, `NFR-013`, `NFR-015`.
