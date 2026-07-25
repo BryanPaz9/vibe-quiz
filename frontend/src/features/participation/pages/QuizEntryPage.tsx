@@ -184,7 +184,7 @@ export default function QuizEntryPage() {
                   error={errors.alias?.message}
                   label="Alias"
                   maxLength={80}
-                  placeholder="Ejemplo: Ada"
+                  placeholder="Ejemplo: Bryger"
                   {...register('alias')}
                 />
                 {errors.root?.message && (

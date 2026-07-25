@@ -89,7 +89,7 @@ export const publishQuizFixture: PublishQuizResponse = {
 export const adminQuizResultsFixture: AdminQuizResultsResponse = {
   data: [
     {
-      alias: 'Ada',
+      alias: 'Bryger',
       status: 'COMPLETED',
       score: 1,
       totalQuestions: 1,
@@ -149,7 +149,7 @@ export const rankingFixture: RankingResponse = {
   entries: [
     {
       position: 1,
-      alias: 'Ada',
+      alias: 'Bryger',
       score: 1,
       totalQuestions: 1,
       percentage: 100,
@@ -162,7 +162,7 @@ export const participationFixture: StartParticipationResponse = {
   participationId: '55555555-5555-4555-8555-555555555555',
   participationToken: 'opaque-participation-token',
   quizPublicId: publicQuizFixture.publicId,
-  alias: 'Ada',
+  alias: 'Bryger',
   startedAt: '2026-07-22T12:00:00.000Z',
 };
 

@@ -141,7 +141,7 @@ describe('public quiz entry', () => {
     renderEntry();
 
     await screen.findByRole('heading', { name: publicQuizFixture.title });
-    await user.type(screen.getByLabelText('Alias'), 'Ada');
+    await user.type(screen.getByLabelText('Alias'), 'Bryger');
     await user.click(
       screen.getByRole('button', { name: 'Comenzar cuestionario' }),
     );
@@ -151,6 +151,6 @@ describe('public quiz entry', () => {
         'Este alias ya fue utilizado en el cuestionario.',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText('Alias')).toHaveValue('Ada');
+    expect(screen.getByLabelText('Alias')).toHaveValue('Bryger');
   });
 });
