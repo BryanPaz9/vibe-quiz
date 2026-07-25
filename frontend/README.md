@@ -176,6 +176,9 @@ El checkpoint de experiencia visual incorpora:
 - Indicadores de carga en consultas y botones con mutaciones pendientes.
 - Motion para transiciones en edición y resolución, respetando la preferencia
   de movimiento reducido del sistema.
+- `PlatformJourney` en la landing para alternar recorridos locales de
+  administrador y participante, navegar sus tres etapas y comunicar el progreso
+  sin depender del backend ni de almacenamiento.
 - Barra sticky del editor con conteo, creación inmediata y foco automático en
   la nueva pregunta.
 - Cronómetro ascendente y responsive durante la participación, restaurado desde

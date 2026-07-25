@@ -118,3 +118,16 @@ seguirá mostrando únicamente alias, puntuación y duración, según `OD-005`.
 ### BR-021
 
 Las operaciones administrativas deberán ser autorizadas por el backend.
+
+## Orientación en la landing
+
+### BR-022
+
+El recorrido del administrador mostrará, en orden, `Crea`, `Publica y
+comparte` y `Analiza resultados`. El recorrido del participante mostrará,
+en orden, `Ingresa con un alias`, `Responde` y `Revisa y compite`.
+
+El perfil inicial será `Administrador`. Cada cambio de perfil regresará a
+la primera etapa y no persistirá estado.
+
+**Estado:** aprobada durante la demostración en vivo del 2026-07-25.

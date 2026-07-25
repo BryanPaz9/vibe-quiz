@@ -23,6 +23,73 @@ test('renders the application shell', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'VibeQuiz' })).toBeVisible();
 });
 
+test('explores both platform journeys from the landing', async ({ page }) => {
+  const apiRequests: string[] = [];
+  page.on('request', (request) => {
+    if (['fetch', 'xhr'].includes(request.resourceType())) {
+      apiRequests.push(request.url());
+    }
+  });
+
+  await page.goto('/');
+  const adminCta = page.getByRole('link', {
+    name: 'Crear un cuestionario',
+  });
+
+  await expect(
+    page.getByRole('button', { name: 'Administrador' }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Participante' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Ingresa con un alias' }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Revisa y compite' }),
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Siguiente' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Anterior' }).click();
+  await expect(page.getByRole('heading', { name: 'Responde' })).toBeVisible();
+
+  await expect(adminCta).toBeVisible();
+  await expect(adminCta).toHaveAttribute('href', '/admin/login');
+  expect(apiRequests).toEqual([]);
+});
+
+test('keeps the platform journey responsive with reduced motion', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 768, height: 1024 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Participante' }).click();
+    await expect(
+      page.getByRole('heading', { name: 'Ingresa con un alias' }),
+    ).toBeVisible();
+
+    const hasHorizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth,
+    );
+    expect(hasHorizontalOverflow).toBe(false);
+
+    for (const control of await page
+      .locator('.platform-journey button')
+      .all()) {
+      const bounds = await control.boundingBox();
+      expect(bounds).not.toBeNull();
+      expect(bounds!.x).toBeGreaterThanOrEqual(0);
+      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(viewport.width);
+    }
+  }
+});
+
 test('authenticates and closes the administrative session', async ({
   page,
 }) => {
@@ -260,7 +327,9 @@ test('consults administrative results and ranking', async ({ page }) => {
   await page.getByRole('link', { name: adminQuizDetailFixture.title }).click();
   await page.getByRole('link', { name: 'Resultados' }).click();
 
-  await expect(page.getByRole('row', { name: /Bryger Completada/ })).toBeVisible();
+  await expect(
+    page.getByRole('row', { name: /Bryger Completada/ }),
+  ).toBeVisible();
   await page.getByRole('link', { name: 'Ver ranking' }).click();
   await expect(page.getByRole('row', { name: /#1 Bryger/ })).toBeVisible();
 });

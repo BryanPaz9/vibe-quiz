@@ -34,6 +34,9 @@ describe('application routing', () => {
         name: 'De una idea a resultados en tres pasos',
       }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Administrador' }),
+    ).toHaveAttribute('aria-pressed', 'true');
     expect(screen.queryByText('Scaffold activo')).not.toBeInTheDocument();
   });
 
