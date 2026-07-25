@@ -260,9 +260,9 @@ test('consults administrative results and ranking', async ({ page }) => {
   await page.getByRole('link', { name: adminQuizDetailFixture.title }).click();
   await page.getByRole('link', { name: 'Resultados' }).click();
 
-  await expect(page.getByRole('row', { name: /Ada Completada/ })).toBeVisible();
+  await expect(page.getByRole('row', { name: /Bryger Completada/ })).toBeVisible();
   await page.getByRole('link', { name: 'Ver ranking' }).click();
-  await expect(page.getByRole('row', { name: /#1 Ada/ })).toBeVisible();
+  await expect(page.getByRole('row', { name: /#1 Bryger/ })).toBeVisible();
 });
 
 test('publishes and closes an administrative quiz', async ({ page }) => {
@@ -389,7 +389,7 @@ test('starts, resolves and submits a public quiz', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: publicQuizFixture.title }),
   ).toBeVisible();
-  await page.getByLabel('Alias').fill('Ada');
+  await page.getByLabel('Alias').fill('Bryger');
   await page.getByRole('button', { name: 'Comenzar cuestionario' }).click();
 
   await expect(page).toHaveURL(
@@ -417,5 +417,5 @@ test('starts, resolves and submits a public quiz', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: 'Tabla de clasificación' }),
   ).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'Ada Tú' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Bryger Tú' })).toBeVisible();
 });

@@ -65,7 +65,7 @@ describe('administrative results and ranking', () => {
     renderAdminRoute(`/admin/quizzes/${adminQuizDetailFixture.id}/results`);
 
     expect(
-      await screen.findByRole('row', { name: /Ada Completada 1\/1 100%/ }),
+      await screen.findByRole('row', { name: /Bryger Completada 1\/1 100%/ }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('row', {
@@ -148,7 +148,7 @@ describe('administrative results and ranking', () => {
     );
 
     expect(
-      await screen.findByRole('row', { name: /#1 Ada 1\/1 100%/ }),
+      await screen.findByRole('row', { name: /#1 Bryger 1\/1 100%/ }),
     ).toBeInTheDocument();
     expect(authorization).toBe(`Bearer ${loginFixture.accessToken}`);
 

@@ -122,7 +122,7 @@ describe('VibeQuiz API', () => {
 
     const started = await request(app.getHttpServer())
       .post(`/api/v1/public/quizzes/${publicId}/participations`)
-      .send({ alias: ' Ada ' })
+      .send({ alias: ' Bryger ' })
       .expect(201);
     await request(app.getHttpServer())
       .get(
@@ -231,7 +231,7 @@ describe('VibeQuiz API', () => {
       .get(`/api/v1/public/quizzes/${publicId}/ranking`)
       .expect(200);
     expect(ranking.body.entries).toHaveLength(1);
-    expect(ranking.body.entries[0]).toMatchObject({ alias: 'Ada', score: 1 });
+    expect(ranking.body.entries[0]).toMatchObject({ alias: 'Bryger', score: 1 });
 
     const administrativeResults = await request(app.getHttpServer())
       .get(`/api/v1/admin/quizzes/${quizId}/results`)
@@ -239,7 +239,7 @@ describe('VibeQuiz API', () => {
       .expect(200);
     expect(administrativeResults.body.data).toHaveLength(1);
     expect(administrativeResults.body.data[0]).toEqual({
-      alias: 'Ada',
+      alias: 'Bryger',
       status: 'COMPLETED',
       score: 1,
       totalQuestions: 1,
