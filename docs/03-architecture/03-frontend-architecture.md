@@ -166,6 +166,9 @@ marcadores explícitos hasta sus respectivas entregas.
 10. **Experiencia visual — implementada:** identidad de marca, landing
     informativa, iconografía funcional, login centrado, indicadores de carga y
     transiciones accesibles en creación y participación.
+11. **Orientación interactiva — implementada:** `PlatformJourney` reemplaza las
+    tarjetas estáticas de la landing con recorridos locales de administrador y
+    participante, navegación directa y secuencial, y adaptación responsive.
 
 La autenticación utiliza `POST /auth/login` y confirma la identidad mediante
 `GET /auth/me` antes de habilitar el panel. El JWT, la identidad verificada y su
@@ -225,6 +228,20 @@ Motion utiliza `LazyMotion` y respeta `prefers-reduced-motion`. Las animaciones
 decoran cambios de preguntas, opciones y selección sin modificar estado de
 negocio ni retrasar solicitudes. Los estados pendientes continúan
 representados por loaders de consulta y spinners en botones de mutación.
+
+`PlatformJourney` es un componente de presentación reutilizable exportado por
+los componentes compartidos. Mantiene únicamente el perfil y el índice de la
+etapa activa mediante estado local de React. Su contenido tipado reside junto al
+componente: no consume TanStack Query, el cliente REST, almacenamiento del
+navegador ni parámetros de URL.
+
+El selector de perfil usa botones con estado `aria-pressed`; las etapas siguen
+el patrón semántico `tablist`, `tab` y `tabpanel`, y el progreso se expresa como
+`Paso n de 3`. Los botones de navegación exponen límites deshabilitados y todos
+los controles conservan foco visible. El cambio de perfil y etapa reutiliza
+Motion bajo la configuración global `reducedMotion="user"`. En móvil, etapas,
+panel y controles se reorganizan verticalmente sin modificar el orden del
+documento.
 
 El editor conserva una barra de acciones sticky con el total de preguntas. Al
 agregar una pregunta desde esa barra, React Hook Form actualiza el arreglo y la

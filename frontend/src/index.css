@@ -274,29 +274,141 @@ code {
   font-size: clamp(1.75rem, 4vw, 2.6rem);
 }
 
-.landing-features {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.landing-feature > svg {
-  margin-bottom: 1.2rem;
-  color: var(--brand-light);
-  font-size: 1.6rem;
-}
-
-.landing-feature h3 {
-  margin-block: 0 0.65rem;
-  font-family: Outfit, Inter, sans-serif;
-  font-size: 1.3rem;
-}
-
-.landing-feature p,
 .landing-callout p {
   margin: 0;
   color: var(--muted);
   line-height: 1.65;
+}
+
+.platform-journey {
+  display: grid;
+  gap: 1rem;
+}
+
+.platform-journey__profiles {
+  display: grid;
+  width: min(100%, 32rem);
+  padding: 0.3rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: hsl(244 30% 12% / 0.76);
+}
+
+.platform-journey__profile,
+.platform-journey__step {
+  min-height: 2.75rem;
+  border: 0;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.platform-journey__profile {
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.platform-journey__profile[aria-pressed='true'] {
+  color: white;
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  box-shadow: 0 0.5rem 1.5rem hsl(244 80% 45% / 0.22);
+}
+
+.platform-journey__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.platform-journey__step {
+  display: flex;
+  min-width: 0;
+  padding: 0.75rem;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: hsl(244 30% 12% / 0.65);
+  text-align: left;
+  gap: 0.65rem;
+}
+
+.platform-journey__step > span {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.platform-journey__step[aria-selected='true'] {
+  border-color: var(--brand-light);
+  color: white;
+  background: linear-gradient(
+    135deg,
+    hsl(258 64% 40% / 0.44),
+    hsl(217 74% 40% / 0.3)
+  );
+}
+
+.platform-journey__panel {
+  display: grid;
+  min-height: 15rem;
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.platform-journey__icon {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+  border-radius: 1.25rem;
+  color: white;
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  font-size: 1.6rem;
+  box-shadow: 0 0.75rem 2rem hsl(244 80% 45% / 0.24);
+}
+
+.platform-journey__progress {
+  margin: 0 0 0.35rem;
+  color: var(--brand-light);
+  font-weight: 800;
+}
+
+.platform-journey__panel h3 {
+  margin: 0 0 0.75rem;
+  font-family: Outfit, Inter, sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.platform-journey__panel ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.platform-journey__navigation {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.platform-journey button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.platform-journey button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
 }
 
 .landing-callout {
@@ -1238,8 +1350,22 @@ code {
     grid-template-columns: 1fr;
   }
 
-  .landing-features {
+  .platform-journey__steps {
     grid-template-columns: 1fr;
+  }
+
+  .platform-journey__panel {
+    min-height: 18rem;
+    grid-template-columns: 1fr;
+  }
+
+  .platform-journey__navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .platform-journey__navigation .button {
+    justify-content: center;
   }
 
   .landing-callout {

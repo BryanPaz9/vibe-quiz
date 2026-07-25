@@ -5,5 +5,6 @@ export { ErrorBoundary } from './ErrorBoundary';
 export { EmptyState, ErrorMessage, Loader } from './Feedback';
 export { Input } from './Input';
 export { PageContainer } from './PageContainer';
+export { PlatformJourney } from './PlatformJourney';
 export { Select } from './Select';
 export { Textarea } from './Textarea';

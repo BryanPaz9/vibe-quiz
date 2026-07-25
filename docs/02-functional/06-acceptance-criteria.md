@@ -166,3 +166,56 @@ Relacionados: `NFR-013`, `NFR-014`, `NFR-015`.
 dependencia crítica.
 
 Relacionados: `NFR-017`.
+
+## AC-018 — Alternar el perfil de orientación
+
+**Dado** un visitante en la landing
+**Cuando** alterna entre `Administrador` y `Participante`
+**Entonces** el contenido cambia inmediatamente a las tres etapas
+aprobadas del perfil
+**Y** el cambio de perfil selecciona la primera etapa.
+
+Relacionados: `FR-025`, `US-018`, `BR-022`.
+
+## AC-019 — Navegar por las etapas
+
+**Dado** un perfil seleccionado
+**Cuando** el visitante usa `Anterior`, `Siguiente` o un indicador de
+etapa
+**Entonces** se muestra una sola etapa activa en detalle
+**Y** los controles anterior y siguiente se deshabilitan en sus límites
+**Y** el progreso se comunica como texto.
+
+Relacionados: `FR-025`, `US-018`, `BR-022`.
+
+## AC-020 — Operar el recorrido de forma accesible
+
+**Dado** el componente de orientación
+**Cuando** se utiliza únicamente con teclado
+**Entonces** todos sus controles son operables y conservan foco visible
+**Y** el perfil y la etapa activos se exponen semánticamente
+**Y** la selección no depende únicamente del color o de iconos.
+
+Relacionados: `FR-025`, `US-018`, `NFR-015`.
+
+## AC-021 — Adaptar movimiento y presentación
+
+**Dado** el recorrido en escritorio, tablet o móvil
+**Cuando** cambia el perfil o la etapa
+**Entonces** Motion presenta una transición breve sin bloquear la
+interacción
+**Y** la preferencia de movimiento reducido elimina animaciones
+relevantes
+**Y** no existe desplazamiento horizontal ni contenido truncado.
+
+Relacionados: `FR-025`, `NFR-013`, `NFR-015`.
+
+## AC-022 — Conservar la landing y su independencia
+
+**Dado** el recorrido interactivo
+**Cuando** se utiliza en la landing
+**Entonces** no genera solicitudes a la API ni persiste estado
+**Y** conserva el hero, la marca, la navegación, el CTA administrativo y
+su destino.
+
+Relacionados: `FR-025`, `US-018`.

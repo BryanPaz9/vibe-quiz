@@ -338,3 +338,57 @@ Commit sugerido conforme a las convenciones del repositorio:
 ```text
 feat: :sparkles: (interactive landing journey)
 ```
+
+## Resultado obtenido
+
+**Fecha:** 2026-07-25
+**Estado:** implementación y validación técnica completadas; revisión
+independiente pendiente.
+
+La landing reemplazó las tarjetas estáticas por `PlatformJourney`. El
+componente permite alternar entre administrador y participante, reinicia la
+primera etapa al cambiar de perfil y ofrece navegación anterior, siguiente,
+directa y mediante teclado. El contenido y el estado son locales; no se
+agregaron rutas, llamadas de API, persistencia ni dependencias.
+
+### Decisiones humanas aprobadas durante la demostración
+
+- Se conservó la rama `feat/live_demo_landing_page`; no se utilizó la rama
+  sugerida por este prompt.
+- Ante el bloqueo de cuota de Antigravity/Gemini, el desarrollador indicó usar
+  Visual Studio Code y no utilizar modelos Gemini. Codex realizó la
+  implementación frontend como una excepción explícita a la asignación
+  ordinaria de responsabilidades.
+- Se asignaron los identificadores `FR-025`, `US-018`, `BR-022` y `AC-018` a
+  `AC-022`, continuando las secuencias existentes.
+
+### Evidencia ejecutada
+
+- Prueba enfocada de `PlatformJourney`: 5 pruebas aprobadas.
+- Suite Vitest completa: 73 pruebas aprobadas y una prueba administrativa ajena
+  al cambio agotó el límite de 10 segundos durante ejecución concurrente.
+- Repetición aislada de la prueba administrativa: aprobada en 6.3 segundos; el
+  fallo se clasificó como interferencia de carga, no regresión.
+- ESLint: aprobado.
+- Prettier: aprobado.
+- Build de producción: aprobado.
+- Playwright enfocado: 2 escenarios aprobados en Chromium.
+- Responsive automatizado: 1440 × 900, 768 × 1024 y 390 × 844 sin overflow
+  horizontal ni controles fuera del viewport.
+- Movimiento reducido: validado con `prefers-reduced-motion: reduce`.
+
+### Cambios humanos
+
+El desarrollador aprobó conservar la rama de la demostración y sustituir el
+handoff a Antigravity por una ejecución directa en Visual Studio Code debido al
+bloqueo de cuota.
+
+### Lecciones aprendidas
+
+- Las comprobaciones de ausencia de red deben filtrar recursos `fetch` y `xhr`;
+  buscar `/api/` en la URL también coincide con módulos fuente de Vite.
+- Las suites concurrentes pueden provocar timeouts falsos en pruebas de
+  interacción extensas; una repetición aislada permite distinguirlos de una
+  regresión.
+- Los indicadores con semántica de pestañas requieren navegación por flechas,
+  Inicio y Fin cuando solo la etapa activa pertenece al orden de tabulación.
