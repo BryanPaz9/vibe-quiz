@@ -154,7 +154,7 @@ Response:
 {
   "data": [
     {
-      "alias": "Ada",
+      "alias": "Bryger",
       "status": "COMPLETED",
       "score": 8,
       "totalQuestions": 10,
@@ -219,7 +219,7 @@ Request:
 
 ```json
 {
-  "alias": "Ada"
+  "alias": "Bryger"
 }
 ```
 
@@ -230,7 +230,7 @@ Response `201`:
   "participationId": "uuid",
   "participationToken": "<opaque-token>",
   "quizPublicId": "uuid",
-  "alias": "Ada",
+  "alias": "Bryger",
   "startedAt": "2026-07-22T12:00:00.000Z"
 }
 ```
@@ -268,7 +268,7 @@ Response `201`:
 ```json
 {
   "participationId": "uuid",
-  "alias": "Ada",
+  "alias": "Bryger",
   "score": 1,
   "totalQuestions": 1,
   "percentage": 100,
@@ -319,7 +319,7 @@ Response:
   "entries": [
     {
       "position": 1,
-      "alias": "Ada",
+      "alias": "Bryger",
       "score": 8,
       "totalQuestions": 10,
       "percentage": 80,
